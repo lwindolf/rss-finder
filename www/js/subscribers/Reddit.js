@@ -9,17 +9,21 @@ export class SubscriberImpl extends Subscriber {
         super();
 
         this.render(selector, `
-            <h3>Subscribe to a channel</h3>
-            <form id="subreddit-form">
-                <input type="text" id="subreddit-input" placeholder="Enter subreddit name">
-                <button type="submit">Subscribe</button>
-            </form>
+            <h3>Feed for subreddit</h3>
+            <div class="block">
+                <form id="subreddit-form">
+                    <input type="text" id="subreddit-input" placeholder="Enter subreddit name">
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
 
-            <h3>Subscribe to a user</h3>
-            <form id="reddit-user-form">
-                <input type="text" id="reddit-user-input" placeholder="Enter Reddit username">
-                <button type="submit">Subscribe</button>
-            </form>
+            <h3>Feed for a user</h3>
+            <div class="block">
+                <form id="reddit-user-form">
+                    <input type="text" id="reddit-user-input" placeholder="Enter Reddit username">
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
         `, {});
 
         {

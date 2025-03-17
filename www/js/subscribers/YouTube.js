@@ -9,19 +9,22 @@ export class SubscriberImpl extends Subscriber {
 		super();
 
 		this.render(selector, `
-            <form id="youtubeForm">
-                <label for="channelId">Enter YouTube Channel ID:</label>
-                <input type="text" id="channelId" name="channelId" required>
-                <button type="submit">Subscribe</button>
-            </form>
-            <p id="rssUrl"></p>
+			<div class="block">
+				<form id="youtubeForm">
+					<p>
+						Please enter the YouTube channel id (something like "UC_xxxxxxxxxxxxxx") to subscribe to the channel.
+						To find the channel id on any YouTube channel open the HTML source view and search for "channel/UC_".
+					</p>
+					<input type="text" id="channelId" name="channelId" placeholder="YouTube Channel ID" required>
+					<button type="submit">Subscribe</button>
+				</form>
+			</div>
         `, {});
 
-		document.getElementById('youtubeForm').addEventListener('submit', function (event) {
+		document.getElementById('youtubeForm').addEventListener('submit', (event) => {
 			event.preventDefault();
 			const channelId = document.getElementById('channelId').value;
-			const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-			document.getElementById('rssUrl').innerText = `RSS URL: ${rssUrl}`;
+			this.preview(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`);
 		});
 	}
 };

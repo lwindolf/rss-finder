@@ -12,15 +12,16 @@ export class SubscriberView {
         this.selector = selector;
         render(this.selector, template(`
             <nav>
-                    <a href='#/'>Back to Overview</a>
+                    <a href='#/'>Go Back</a>
             </nav>
 
-            <h1>Subscribe to {{name}}</h1>
+            <h1><img class="favicon" src="{{favicon}}"></img> Find feeds on {{name}}</h1>
 
             <div id='subscriberView'>
             </div>
         `), {
-            name: s.name
+            name: s.name,
+            favicon: s.favicon
         });
         new s.class("#subscriberView");
 
@@ -30,6 +31,7 @@ export class SubscriberView {
     }
 
     #preview(url) {
+        /*
         render(this.selector, template(`
             <nav>
                     <a href='#/'>Back to Overview</a>
@@ -41,5 +43,9 @@ export class SubscriberView {
         `), {
             url
         });
+        */
+
+        // Right now we habe no preview, so we directly subscribe
+        window.open('feed:'+url, '_blank');
     }
 };

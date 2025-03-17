@@ -15,7 +15,7 @@ export class SubscriberOverview {
 			<div class='subscriberList'>
 				{{#each subscribers}}
 					<a href='#/subscriber/{{routeName}}'>
-						<div class='subscriber'>
+						<div class='subscriber block'>
 							<img src='{{favicon}}'/>
 							<div class='subscriberTitle'>{{name}}</div>
 						</div>

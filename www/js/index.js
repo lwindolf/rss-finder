@@ -23,17 +23,23 @@ window.addEventListener('load', async () => {
         // FIXME: generate JSON list using build.sh
         for(const routeName of [
                 'Default',
+                'arxiv.org',
+                'Archive.org',
                 'iTunes',
                 'Mastodon',
                 'Reddit',
                 'YouTube'
         ]) {
-                const s = await import(`./subscribers/${routeName}.js`);
-                window.subscribers[routeName] = {
-                        name      : s.SubscriberImpl.name,
-                        favicon   : s.SubscriberImpl.favicon,
-                        class     : s.SubscriberImpl,
-                        routeName
+                try {
+                        const s = await import(`./subscribers/${routeName}.js`);
+                        window.subscribers[routeName] = {
+                                name      : s.SubscriberImpl.name,
+                                favicon   : s.SubscriberImpl.favicon,
+                                class     : s.SubscriberImpl,
+                                routeName
+                        }
+                } catch(e) {
+                        console.error(`Failed to load subscriber ${routeName}: ${e}`);
                 }
         }
 

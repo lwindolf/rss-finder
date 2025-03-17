@@ -9,10 +9,11 @@ export class SubscriberImpl extends Subscriber {
         super();
 
         this.render(selector, `            
-            <form id="search-form">
+            <form id="search-form" class="block">
                 <input type="text" id="search-input" placeholder="Enter a search term">
                 <button type="submit">Search</button>
             </form>
+            <div id='results'></div>
         `, {});
 
         {
@@ -27,6 +28,7 @@ export class SubscriberImpl extends Subscriber {
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
+                            this.#renderResults('#results', data);
                             console.log(data)
                         })
                         .catch(error => {
@@ -35,8 +37,37 @@ export class SubscriberImpl extends Subscriber {
                 }
             });
         }
+    }
 
+    #renderResults(selector, data) {
+        this.render(selector, `            
+            {{#each results}}
+                <div class='result block'>
+                    <div class='resultImage'>
+                        <img src='{{artworkUrl100}}'/>
+                    </div>
+                    <div class='resultDetails'>
+                        <div class='resultTitle'><a href="{{collectionViewUrl}}">{{collectionName}}</a></div>
+                        <div class='resultArtist'>{{artistName}}</div>
+                        <div class='resultGenre'>
+                            {{#each genres}}
+                                <span>{{this}}</span>
+                            {{/each}}
+                        </div>
+                        <div class='resultFeedHidden'>{{feedUrl}}</div>
+                        <button class='subscribe'>Subscribe</button>
+                    </div>
+                </div>
+            {{/each}}
+        `, {
+            results: data.results
+        });
 
-        // curl "" | jq .
+        document.querySelectorAll('.resultDetails button.subscribe').forEach((button, index) => {
+            button.addEventListener('click', (ev) => {
+                const result = ev.target.closest('.result');
+                this.preview(result.querySelector('.resultFeedHidden').textContent);       
+            })
+        });
     }
 };
