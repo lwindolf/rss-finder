@@ -5,7 +5,7 @@ import { Subscriber } from "../Subscriber.js";
 
 export class SubscriberImpl extends Subscriber {
     static name = "Google News";
-    static favicon = "icons/google-news.png";
+    static favicon = "google-news.png";
 
     constructor(selector) {
         super();

@@ -3,7 +3,7 @@ import { Subscriber } from "../Subscriber.js";
 
 export class SubscriberImpl extends Subscriber {
     static name = "arXiv";
-    static favicon = "icons/arxiv.png";
+    static favicon = "arxiv.png";
 
     constructor(selector) {
         super();

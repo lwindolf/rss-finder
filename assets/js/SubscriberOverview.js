@@ -16,7 +16,7 @@ export class SubscriberOverview {
 				{{#each subscribers}}
 					<a href='#/subscriber/{{routeName}}'>
 						<div class='subscriber block'>
-							<img src='{{favicon}}'/>
+							<img src='assets/icons/{{favicon}}'/>
 							<div class='subscriberTitle'>{{name}}</div>
 						</div>
 					</a>

@@ -3,7 +3,7 @@ import { Subscriber } from "../Subscriber.js";
 
 export class SubscriberImpl extends Subscriber {
 	static name = "YouTube";
-	static favicon = "icons/youtube.png";
+	static favicon = "youtube.png";
 
 	constructor(selector) {
 		super();

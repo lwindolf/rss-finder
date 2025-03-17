@@ -15,7 +15,7 @@ export class SubscriberView {
                     <a href='#/'>Go Back</a>
             </nav>
 
-            <h1><img class="favicon" src="{{favicon}}"></img> Find feeds on {{name}}</h1>
+            <h1><img class="favicon" src="assets/icons/{{favicon}}"></img> Find feeds on {{name}}</h1>
 
             <div id='subscriberView'>
             </div>

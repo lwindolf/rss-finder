@@ -3,7 +3,7 @@ import { Subscriber } from "../Subscriber.js";
 
 export class SubscriberImpl extends Subscriber {
     static name = "Website";
-    static favicon = "icons/default.svg";
+    static favicon = "default.svg";
 
     constructor(selector) {
         super();

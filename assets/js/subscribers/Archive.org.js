@@ -5,7 +5,7 @@ import { Subscriber } from "../Subscriber.js";
 
 export class SubscriberImpl extends Subscriber {
     static name = "archive.org";
-    static favicon = "icons/archive.org.svg";
+    static favicon = "archive.org.svg";
 
     constructor(selector) {
         super();

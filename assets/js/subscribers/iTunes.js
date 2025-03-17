@@ -3,7 +3,7 @@ import { Subscriber } from "../Subscriber.js";
 
 export class SubscriberImpl extends Subscriber {
     static name = "iTunes";
-    static favicon = "icons/itunes.svg";
+    static favicon = "itunes.svg";
 
     constructor(selector) {
         super();
