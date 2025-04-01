@@ -23,8 +23,11 @@ window.addEventListener('load', async () => {
         // FIXME: generate JSON list using build.sh
         for(const routeName of [
                 'Default',
+                'killthenewsletter',
                 'arxiv.org',
                 'Archive.org',
+                'Google',
+                'Bing',
                 'iTunes',
                 'Mastodon',
                 'Reddit',

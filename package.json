@@ -2,7 +2,7 @@
   "scripts": {
     "test": "eslint --ignore-pattern www/js/vendor/* www/js && jest --coverage",
     "build": "./build.sh",
-    "start": "cd www && npx serve -S"
+    "start": "npx serve -S"
   },
   "jest": {
     "verbose": true,
