@@ -26,8 +26,8 @@ h1 img.favicon {
 }
 
 .subscriber {
-        width: 100px;
-        height: 130px;
+        width: 80px;
+        height: 110px;
 }
 
 .subscriber:hover {
@@ -51,8 +51,8 @@ h1 img.favicon {
 }
 
 .subscriber img {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
         object-fit: cover;
 }
 
@@ -118,6 +118,13 @@ h1 img.favicon {
 class RssFinder extends HTMLElement {
         // state
         #subscribers = {};      // available subscribers
+        #settings = {
+                // Note: we treat all settings as strings
+                "show-title"     : "false",
+                "scheme"         : "feed:",
+                "use-cors-proxy" : "false",
+                "cors-proxy"     : "https://corsproxy.io/?url=",
+        };
 
         constructor() {
                 super();
@@ -126,11 +133,18 @@ class RssFinder extends HTMLElement {
         connectedCallback() {
                 this.attachShadow({ mode: "open" }).adoptedStyleSheets = [stylesheet];
 
-                this.params = [...this.shadowRoot.host.attributes].reduce((acc, attribute) => {
+                // Collect parameters from shadow root attributes
+                this.#settings = [...this.shadowRoot.host.attributes].reduce((acc, attribute) => {
                         acc[attribute.nodeName] = attribute.nodeValue;
                         return acc;
                 }, {});
-                      
+
+                // Collect parameters from URL query string
+                const queryParams = new URLSearchParams(window.location.search);
+                for(const [key, value] of queryParams.entries()) {
+                        this.#settings[key] = value;
+                }
+
                 this.content = document.createElement('div');
                 this.shadowRoot.appendChild(this.content);
                 this.loadOverview();
@@ -164,7 +178,7 @@ class RssFinder extends HTMLElement {
                                 console.error(`Failed to load subscriber ${routeName}: ${e}`);
                         }
                 }                
-                new SubscriberOverview(this.content, this.#subscribers, this.params);
+                new SubscriberOverview(this.content, this.#subscribers, this.#settings);
         }
 }
 

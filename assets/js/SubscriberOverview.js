@@ -7,11 +7,11 @@ import { SubscriberView } from "./SubscriberView.js";
 import * as r from "./helpers/render.js";
 
 export class SubscriberOverview {
-	constructor(el, subscribers, parameters) {
+	constructor(el, subscribers, settings) {
 		r.renderElement(el, r.template(`
-			{{#if parameters.show-title }}
+			{{#compare settings.show-title "==" "true"}}
 			<h1>Discover Feeds</h1>
-			{{/if}}
+			{{/compare}}
 
 			<div class='subscriberList'>
 				{{#each subscribers}}
@@ -25,7 +25,7 @@ export class SubscriberOverview {
 			</div>
 		`), {
 			subscribers,
-			parameters
+			settings
 		});
 
 		el.addEventListener("click", (event) => {
@@ -34,7 +34,7 @@ export class SubscriberOverview {
 				event.preventDefault();
 				const routeName = div.parentElement.name;
 				if (routeName) {
-					new SubscriberView(el, subscribers[routeName], parameters);
+					new SubscriberView(el, subscribers[routeName], settings);
 				}
 			}
 		});
