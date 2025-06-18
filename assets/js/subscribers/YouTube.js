@@ -5,10 +5,10 @@ export class SubscriberImpl extends Subscriber {
 	static name = "YouTube";
 	static favicon = "youtube.png";
 
-	constructor(selector) {
+	constructor(el) {
 		super();
 
-		this.render(selector, `
+		this.render(el, `
 			<div class="block">
 				<form id="youtubeForm">
 					<p>
@@ -21,9 +21,9 @@ export class SubscriberImpl extends Subscriber {
 			</div>
         `, {});
 
-		document.getElementById('youtubeForm').addEventListener('submit', (event) => {
+		el.getRootNode().getElementById('youtubeForm').addEventListener('submit', (event) => {
 			event.preventDefault();
-			const channelId = document.getElementById('channelId').value;
+			const channelId = el.getRootNode().getElementById('channelId').value;
 			this.preview(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`);
 		});
 	}

@@ -1,27 +1,28 @@
 // vim: set ts=4 sw=4:
 
-import { render, template } from "./helpers/render.js";
+import * as r from "./helpers/render.js";
 import { linkAutoDiscover } from "./parsers/autodiscover.js";
 
 export class Subscriber {
-    render(selector, str, params) {
-        render(selector, template(str), params);
+    render(el, str, params) {
+        r.renderElement(el, r.template(str), params);
     }
 
     // Helper method for suscriber implementations that need
     // simple feed autodiscovery. Performs auto discovery and
     // present a result selection to the user.
     //
+    // @param {HTMLElement} el - the element to render the results into
     // @param {string} data - the HTML content of the website
     // @param {string} baseUrl - the URL of the website
-    autodiscover(data, baseUrl) {
-        if (!document.getElementById('results')) {
-            const results = document.createElement('div');
+    autodiscover(el, data, baseUrl) {
+        if (!el.getRootNode().getElementById('results')) {
+            const results = el.getRootNode().createElement('div');
             results.id = 'results';
-            document.body.append(results);
+            el.getRootNode().body.append(results);
         }
 
-        this.render('#results', `
+        this.render(el.getRootNode().getElementById('results'), `
             {{#compare results.length "==" 0}}
                 <h3>
                     No feeds found!
@@ -54,7 +55,7 @@ export class Subscriber {
             results: linkAutoDiscover(data, baseUrl)
         });
 
-        document.querySelectorAll('.subscribe').forEach((button) => {
+        el.getRootNode().querySelectorAll('.subscribe').forEach((button) => {
             button.addEventListener('click', (event) => {
                 this.preview(event.target.parentElement.querySelector('a').href);
             });
@@ -62,8 +63,9 @@ export class Subscriber {
     }
 
     preview(url) {
+        console.log(`Previewing feed: ${url}`);
         document.dispatchEvent(new CustomEvent('preview', {
             detail: url
         }));
     }
-};
+}

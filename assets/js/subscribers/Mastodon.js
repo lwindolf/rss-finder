@@ -5,10 +5,10 @@ export class SubscriberImpl extends Subscriber {
     static name = "Mastodon";
     static favicon = "mastodon.png";
 
-    constructor(selector) {
+    constructor(el) {
         super();
 
-        this.render(selector, `
+        this.render(el, `
             <div class="block">
                 <p>
                     Hint: Mastodon RSS feeds are created by adding ".rss" to the end of the URL.
@@ -23,8 +23,8 @@ export class SubscriberImpl extends Subscriber {
             </div>
         `, {});
 
-        document.getElementById('link-form').addEventListener('submit', (event) => {
-            let url = document.getElementById('link-input').value.trim();
+        el.getRootNode().getElementById('link-form').addEventListener('submit', () => {
+            let url = el.getRootNode().getElementById('link-input').value.trim();
             if (-1 == url.indexOf('://'))
                 url = `https://${url}`;
             this.preview(`${url}.rss`);

@@ -7,10 +7,10 @@ export class SubscriberImpl extends Subscriber {
     static name = "Google News";
     static favicon = "google-news.png";
 
-    constructor(selector) {
+    constructor(el) {
         super();
 
-        this.render(selector, `
+        this.render(el, `
             <div class="block">
                 <p>
                     Enter a search query.
@@ -22,8 +22,8 @@ export class SubscriberImpl extends Subscriber {
             </div>
         `, {});
 
-        document.getElementById('search-form').addEventListener('submit', (event) => {
-            let query = document.getElementById('search-input').value.trim();
+        el.getRootNode().getElementById('search-form').addEventListener('submit', () => {
+            let query = el.getRootNode().getElementById('search-input').value.trim();
             this.preview(`https://news.google.com/rss/search?hl=en-US&gl=US&ceid=US%3Aen&oc=11&q=${encodeURIComponent(query)}`);
         });
     }

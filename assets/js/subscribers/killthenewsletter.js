@@ -5,10 +5,10 @@ export class SubscriberImpl extends Subscriber {
     static name = "Newsletter";
     static favicon = "default.svg";
 
-    constructor(selector) {
+    constructor(el) {
         super();
 
-        this.render(selector, `
+        this.render(el, `
             <div class="block">
                 <p>
                     The free web service <a href="https://kill-the-newsletter.com/">Kill the Newsletter</a> allows you to subscribe to newsletters.

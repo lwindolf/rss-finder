@@ -5,10 +5,10 @@ export class SubscriberImpl extends Subscriber {
     static name = "iTunes";
     static favicon = "itunes.svg";
 
-    constructor(selector) {
+    constructor(el) {
         super();
 
-        this.render(selector, `            
+        this.render(el, `            
             <form id="search-form" class="block">
                 <input type="text" id="search-input" placeholder="Enter a search term">
                 <button type="submit">Search</button>
@@ -17,8 +17,9 @@ export class SubscriberImpl extends Subscriber {
         `, {});
 
         {
-            const form = document.getElementById('search-form');
-            const input = document.getElementById('search-input');
+            const form    = el.getRootNode().getElementById('search-form');
+            const input   = el.getRootNode().getElementById('search-input');
+            const results = el.getRootNode().getElementById('results');
 
             form.addEventListener('submit', (event) => {
                 event.preventDefault();
@@ -28,7 +29,7 @@ export class SubscriberImpl extends Subscriber {
                     fetch(url)
                         .then(response => response.json())
                         .then(data => {
-                            this.#renderResults('#results', data);
+                            this.#renderResults(results, data);
                             console.log(data)
                         })
                         .catch(error => {
@@ -39,8 +40,8 @@ export class SubscriberImpl extends Subscriber {
         }
     }
 
-    #renderResults(selector, data) {
-        this.render(selector, `            
+    #renderResults(el, data) {
+        this.render(el, `            
             {{#each results}}
                 <div class='result block'>
                     <div class='resultImage'>
@@ -63,7 +64,7 @@ export class SubscriberImpl extends Subscriber {
             results: data.results
         });
 
-        document.querySelectorAll('.resultDetails button.subscribe').forEach((button, index) => {
+        el.getRootNode().querySelectorAll('.resultDetails button.subscribe').forEach((button) => {
             button.addEventListener('click', (ev) => {
                 const result = ev.target.closest('.result');
                 this.preview(result.querySelector('.resultFeedHidden').textContent);       

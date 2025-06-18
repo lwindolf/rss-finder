@@ -57,23 +57,28 @@ function template(str) {
     return window.Handlebars.compile(str);
 }
 
-function render(selector, template, params, append = false) {
-    let e = document.querySelector(selector);
-    let result;
+function renderElement(e, template, params, append = false) {
+  let result;
 
-    if(!e)
-        return;
+  if (!e) {
+      console.warn(`renderElement() nothing found for selector: ${e}`);
+      return;
+  }
 
-    try {
-        result = template(params);
-    } catch(e) {
-        result = `Rendering exception: ${e}`;
-    }
+  try {
+      result = template(params);
+  } catch (e) {
+      result = `Rendering exception: ${e}`;
+  }
 
-    if(append)
-        e.innerHTML += result;
-    else
-        e.innerHTML = result;
+  if (append)
+      e.innerHTML += result;
+  else
+      e.innerHTML = result;
 }
 
-export { template, render };
+function render(selector, template, params, append = false) {
+  renderElement(document.querySelector(selector), template, params, append);
+}
+
+export { template, render, renderElement };

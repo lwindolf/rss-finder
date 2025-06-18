@@ -5,10 +5,10 @@ export class SubscriberImpl extends Subscriber {
     static name = "Google";
     static favicon = "google.webp";
 
-    constructor(selector) {
+    constructor(el) {
         super();
 
-        this.render(selector, `
+        this.render(el, `
             <div class="block">
                 <p>
                     Google does not allow direct subscribing. But you can create

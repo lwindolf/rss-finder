@@ -5,10 +5,10 @@ export class SubscriberImpl extends Subscriber {
     static name = "Bing";
     static favicon = "bing.svg";
 
-    constructor(selector) {
+    constructor(el) {
         super();
 
-        this.render(selector, `
+        this.render(el, `
             <div class="block">
                 <p>
                     Bing allows subscribing to search results via RSS.
@@ -20,8 +20,8 @@ export class SubscriberImpl extends Subscriber {
             </div>
         `, {});
 
-        document.getElementById('link-form').addEventListener('submit', (event) => {
-            let search = document.getElementById('search-input').value.trim();
+        el.getRootNode().getElementById('link-form').addEventListener('submit', () => {
+            let search = el.getRootNode().getElementById('search-input').value.trim();
             this.preview(`https://www.bing.com/search?q=${encodeURI(search)}&format=rss`);
         });
     }

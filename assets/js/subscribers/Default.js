@@ -5,10 +5,10 @@ export class SubscriberImpl extends Subscriber {
     static name = "Website";
     static favicon = "default.svg";
 
-    constructor(selector) {
+    constructor(el) {
         super();
 
-        this.render(selector, `
+        this.render(el, `
             <div class="block">
                     <p>
                             Discover feeds on any website by parsing the HTML.
@@ -22,8 +22,8 @@ export class SubscriberImpl extends Subscriber {
             <div id="results"></div>
          `, {});
 
-        const form = document.getElementById('url-form');
-        const url = document.getElementById('url');
+        const form    = el.getRootNode().getElementById('url-form');
+        const url     = el.getRootNode().getElementById('url');
 
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
@@ -34,13 +34,13 @@ export class SubscriberImpl extends Subscriber {
 
             fetch(feedUrl)
                 .then(response => response.text())
-                .then(data => this.autodiscover(data, feedUrl))
-                .catch(error => this.#corsError(feedUrl));            
+                .then(data => this.autodiscover(el, data, feedUrl))
+                .catch(error => this.#corsError(el, feedUrl));            
         });
     }
 
-    #corsError(feedUrl) {
-        this.render('#results', `
+    #corsError(el, feedUrl) {
+        this.render(el.getRootNode().getElementById('results'), `
             <div class="block">
                 <p>
                     Failed to fetch feed from <a href="{{feedUrl}}">{{feedUrl}}</a>. Please check if you can reach
@@ -65,15 +65,15 @@ export class SubscriberImpl extends Subscriber {
             proxyUrl : 'https://corsproxy.io/?url=' + encodeURI(feedUrl)
         });
 
-        const form = document.getElementById('cors-retry-form');
-        const url = document.getElementById('proxyUrl');
+        const form = el.getRootNode().getElementById('cors-retry-form');
+        const url  = el.getRootNode().getElementById('proxyUrl');
 
         form.addEventListener('submit', (event) => {
             event.preventDefault();
             const proxyUrl = url.value.trim();
             fetch(proxyUrl)
                 .then(response => response.text())
-                .then(data => this.autodiscover(data, proxyUrl))
+                .then(data => this.autodiscover(el, data, proxyUrl))
                 .catch(error => console.error(error));            
         });
     }

@@ -5,10 +5,10 @@ export class SubscriberImpl extends Subscriber {
     static name = "Reddit";
     static favicon = "reddit.png";
 
-    constructor(selector) {
+    constructor(el) {
         super();
 
-        this.render(selector, `
+        this.render(el, `
             <h3>Feed for subreddit</h3>
             <div class="block">
                 <form id="subreddit-form">
@@ -27,8 +27,8 @@ export class SubscriberImpl extends Subscriber {
         `, {});
 
         {
-            const form = document.getElementById('subreddit-form');
-            const input = document.getElementById('subreddit-input');
+            const form  = el.getRootNode().getElementById('subreddit-form');
+            const input = el.getRootNode().getElementById('subreddit-input');
 
             form.addEventListener('submit', (event) => {
                 event.preventDefault();
@@ -41,17 +41,18 @@ export class SubscriberImpl extends Subscriber {
             });
         }
         {
-            const form = document.getElementById('reddit-user-form');
-            const input = document.getElementById('reddit-user-input');
+            const form  = el.getRootNode().getElementById('reddit-user-form');
+            const input = el.getRootNode().getElementById('reddit-user-input');
 
             form.addEventListener('submit', (event) => {
                 event.preventDefault();
                 const username = input.value.trim();
                 if (username) {
                     const rssUri = `https://www.reddit.com/user/${username}/.rss`;
+
                     this.preview(`${rssUri}`);
                 }
             });
         }
     }
-};
+}
