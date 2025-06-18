@@ -7,14 +7,6 @@ import { SubscriberOverview } from "./SubscriberOverview.js";
 const stylesheet = new CSSStyleSheet()
 
 stylesheet.replaceSync(`
-body {
-        font-family: Arial, Helvetica, sans-serif;
-        color: #666;
-        padding: 24px;
-        max-width: 1024px;
-        margin: auto;
-}
-
 .block {
         background: #eee;
         padding: 16px;
