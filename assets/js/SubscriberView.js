@@ -44,7 +44,7 @@ export class SubscriberView {
 
         // Right now we habe no preview, so we directly subscribe
         window.open(
-            window.RssFinder.settings['scheme']+':'+url,
+            window.RssFinder.settings['scheme']+url,
             window.RssFinder.settings['target']
         );
     }
