@@ -7,7 +7,7 @@ import { SubscriberView } from "./SubscriberView.js";
 import * as r from "./helpers/render.js";
 
 export class SubscriberOverview {
-	constructor(el, subscribers, settings) {
+	constructor(el, subscribers) {
 		r.renderElement(el, r.template(`
 			{{#compare settings.show-title "==" "true"}}
 			<h1>Discover Feeds</h1>
@@ -25,7 +25,7 @@ export class SubscriberOverview {
 			</div>
 		`), {
 			subscribers,
-			settings
+			settings: window.RssFinder.settings
 		});
 
 		el.addEventListener("click", (event) => {
@@ -34,7 +34,7 @@ export class SubscriberOverview {
 				event.preventDefault();
 				const routeName = div.parentElement.name;
 				if (routeName) {
-					new SubscriberView(el, subscribers[routeName], settings);
+					new SubscriberView(el, subscribers[routeName]);
 				}
 			}
 		});

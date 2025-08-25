@@ -118,31 +118,34 @@ h1 img.favicon {
 class RssFinder extends HTMLElement {
         // state
         #subscribers = {};      // available subscribers
-        #settings = {
+        settings = {
                 // Note: we treat all settings as strings
                 "show-title"     : "false",
                 "scheme"         : "feed:",
                 "use-cors-proxy" : "false",
                 "cors-proxy"     : "https://corsproxy.io/?url=",
+                "target"         : "_blank"
         };
 
         constructor() {
                 super();
+                window.RssFinder = this;
         }
 
         connectedCallback() {
                 this.attachShadow({ mode: "open" }).adoptedStyleSheets = [stylesheet];
 
                 // Collect parameters from shadow root attributes
-                this.#settings = [...this.shadowRoot.host.attributes].reduce((acc, attribute) => {
+                const tagSettings = [...this.shadowRoot.host.attributes].reduce((acc, attribute) => {
                         acc[attribute.nodeName] = attribute.nodeValue;
                         return acc;
                 }, {});
+                Object.assign(this.settings, tagSettings);
 
                 // Collect parameters from URL query string
                 const queryParams = new URLSearchParams(window.location.search);
                 for(const [key, value] of queryParams.entries()) {
-                        this.#settings[key] = value;
+                        this.settings[key] = value;
                 }
 
                 this.content = document.createElement('div');
@@ -178,7 +181,7 @@ class RssFinder extends HTMLElement {
                                 console.error(`Failed to load subscriber ${routeName}: ${e}`);
                         }
                 }                
-                new SubscriberOverview(this.content, this.#subscribers, this.#settings);
+                new SubscriberOverview(this.content, this.#subscribers);
         }
 }
 

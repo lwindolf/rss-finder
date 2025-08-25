@@ -48,6 +48,7 @@ The following parameters are supported
 | uri-scheme        | Which scheme to trigger for subscriptions                       | `feed:`          |
 | use-cors-proxy    | Whether to retry using a CORS proxy when a network error occurs | `false`          |
 | cors-proxy        | URL of a cors proxy to use                                      | `https://corsproxy.io/` |
+| target            | When subscribing which location target to use                   | `_blank`         |
 
 ## Privacy considerations
 

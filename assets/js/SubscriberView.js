@@ -43,6 +43,9 @@ export class SubscriberView {
         */
 
         // Right now we habe no preview, so we directly subscribe
-        window.open('feed:'+url, '_blank');
+        window.open(
+            window.RssFinder.settings['scheme']+':'+url,
+            window.RssFinder.settings['target']
+        );
     }
 };
