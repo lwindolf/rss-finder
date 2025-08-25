@@ -53,7 +53,7 @@ export class SubscriberImpl extends Subscriber {
                     To work around this issue you can use a CORS proxy.
                 </p>
                 <p>
-                    <b>Note: the proxy owner <a href="https://corsproxy.io/">Cloudflare</a> will see your request!</b>
+                    <b>Note: the proxy owner <a href="${window.RssFinder.settings['cors-proxy']}">${window.RssFinder.settings['cors-proxy']}</a> will see your request!</b>
                 </p>
                 <form id="cors-retry-form">
                     <input type="text" id="proxyUrl" placeholder="Enter a CORS proxy URL" value="{{proxyUrl}}">
@@ -62,7 +62,7 @@ export class SubscriberImpl extends Subscriber {
             </div>
         `, {
             feedUrl,
-            proxyUrl : 'https://corsproxy.io/?url=' + encodeURI(feedUrl)
+            proxyUrl : window.RssFinder.settings['cors-proxy'] + encodeURI(feedUrl)
         });
 
         const form = el.getRootNode().getElementById('cors-retry-form');
