@@ -38,5 +38,6 @@ export class SearchForm extends Subscriber {
                     });
             }
         });
+        input.focus();
     }
 }
