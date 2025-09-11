@@ -167,6 +167,7 @@ class RssFinder extends HTMLElement {
                         'Bing',
                         'iTunes',
                         'Mastodon',
+                        'Bluesky',
                         'Reddit',
                         'YouTube'
                 ]) {

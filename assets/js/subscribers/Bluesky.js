@@ -3,27 +3,25 @@
 import { SearchForm } from "../SearchForm.js";
 
 export class SubscriberImpl extends SearchForm {
-    static name = "Mastodon";
-    static favicon = "mastodon.png";
-    static title = "Find Mastodon accounts";
+    static name = "Bluesky";
+    static favicon = "bluesky.png";
 
     constructor(el) {
         super(
             el,
             (query) =>
-                `https://mastodon.social/api/v2/search?type=accounts&q=${encodeURIComponent(query)}`,
+                `https://public.api.bsky.app/xrpc/app.bsky.actor.searchActors?q=${encodeURIComponent(query)}`,
             (el, data) => {
-                this.render(el, `
+                this.render(el, `            
                     {{#each results}}
                         <div class='result block'>
                             <div class='resultImage'>
                                 <img src='{{avatar}}'/>
                             </div>
                             <div class='resultDetails'>
-                                <div class='resultTitle'><a href="https://mastodon.social/@{{username}}">@{{username}}</a> -- {{display_name}}</div>
-                                <div class='resultProfile'>{{{note}}}</div>
-                                <div class='resultGenre'></div>
-                                <div class='resultFeedHidden'>https://mastodon.social/@{{username}}.rss</div>
+                                <div class='resultTitle'><a href="https://bsky.app/profile/{{handle}}">{{displayName}}</a> -- @{{handle}}</div>
+                                <div class='resultProfile'>{{description}}</div>
+                                <div class='resultFeedHidden'>https://bsky.app/profile/{{handle}}</div>
                                 <button class='subscribe'>Subscribe</button>
                             </div>
                         </div>
@@ -31,7 +29,7 @@ export class SubscriberImpl extends SearchForm {
                         <p>No results found</p>
                     {{/each}}
                 `, {
-                    results: data.accounts
+                    results: data.actors
                 });
 
                 el.getRootNode().querySelectorAll('.resultDetails button.subscribe').forEach((button) => {
@@ -42,12 +40,5 @@ export class SubscriberImpl extends SearchForm {
                 });
             }
         );
-
-        el.getRootNode().getElementById('results').innerHTML += `
-                        <p>
-                    Hint: Mastodon RSS feeds are created by adding ".rss" to the end of the URL of Mastodon page links.
-                </p>
-                `;
-
     }
 }

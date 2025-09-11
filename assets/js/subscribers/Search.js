@@ -10,14 +10,15 @@ export class SubscriberImpl extends Subscriber {
                 super();
 
                 this.render(el, `
-                        <x-rss-feed-index-search
-                                base="https://lwindolf.github.io/rss-feed-index/data/"
-                                style="https://lwindolf.github.io/rss-feed-index/RssFeedIndexSearch.css"
-                                showRandom="0"
-                                stats="0"
-                                title="0">
-                        </x-rss-feed-index-search>
-
-        `, {});
+                        <div class="block">
+                                <x-rss-feed-index-search
+                                        base="https://lwindolf.github.io/rss-feed-index/data/"
+                                        style="https://lwindolf.github.io/rss-feed-index/RssFeedIndexSearch.css"
+                                        showRandom="0"
+                                        stats="0"
+                                        title="0">
+                                </x-rss-feed-index-search>
+                        </div>
+                `, {});
         }
 }
