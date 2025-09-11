@@ -7,18 +7,20 @@ import * as r from "./helpers/render.js";
 
 export class SubscriberView {
     constructor(el, s) {
+        console.log(s);
         r.renderElement(el, r.template(`
             <nav>
                 <a href='' name='go-back'>Go Back</a>
             </nav>
 
-            <h1><img class="favicon" src="assets/icons/{{favicon}}"></img> Find feeds on {{name}}</h1>
+            <h1><img class="favicon" src="assets/icons/{{favicon}}"></img> {{title}}</h1>
 
             <div id='subscriberView'>
             </div>
         `), {
             name: s.name,
-            favicon: s.favicon
+            favicon: s.favicon,
+            title: s.title?s.title:`Find feeds on ${s.name}`
         });
         new s.class(el.querySelector("#subscriberView"));
 

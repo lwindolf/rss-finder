@@ -4,6 +4,7 @@
 // Servers as start page for the user.
 
 import { SubscriberView } from "./SubscriberView.js";
+import { RssFeedIndexSearch } from "https://lwindolf.github.io/rss-feed-index/RssFeedIndexSearch.js";
 import * as r from "./helpers/render.js";
 
 export class SubscriberOverview {

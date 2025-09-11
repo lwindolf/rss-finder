@@ -158,6 +158,7 @@ class RssFinder extends HTMLElement {
 
                 // FIXME: generate JSON list using build.sh
                 for(const routeName of [
+                        'Search',
                         'Default',
                         'killthenewsletter',
                         'arxiv.org',
@@ -174,6 +175,7 @@ class RssFinder extends HTMLElement {
                                 this.#subscribers[routeName] = {
                                         name      : s.SubscriberImpl.name,
                                         favicon   : s.SubscriberImpl.favicon,
+                                        title     : s.SubscriberImpl.title,
                                         class     : s.SubscriberImpl,
                                         routeName
                                 }
