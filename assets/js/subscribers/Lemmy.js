@@ -22,7 +22,7 @@ export class SubscriberImpl extends SearchForm {
                                 <img src='{{icon}}'/>
                             </div>
                             <div class='resultDetails'>
-                                <div class='resultTitle'><a href="{{actor_id}}">r/{{name}}</a> -- {{title}}</div>
+                                <div class='resultTitle'><a href="{{actor_id}}">{{name}}</a> -- {{title}}</div>
                                 <div class='resultProfile'>{{description}}</div>
                                 <div class='resultGenre'></div>
                                 <div class='resultFeedHidden'>{{../feed}}</div>
