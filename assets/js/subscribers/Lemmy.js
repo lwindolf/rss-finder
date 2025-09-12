@@ -53,12 +53,5 @@ export class SubscriberImpl extends SearchForm {
                 });
             }
         );
-
-        el.getRootNode().getElementById('results').innerHTML += `
-                        <p>
-                    Hint: Mastodon RSS feeds are created by adding ".rss" to the end of the URL of Mastodon page links.
-                </p>
-                `;
-
     }
 }
