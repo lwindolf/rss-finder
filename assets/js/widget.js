@@ -170,6 +170,8 @@ class RssFinder extends HTMLElement {
                         'Bluesky',
                         'Lemmy',
                         'Reddit',
+                        'Patreon',
+                        'SoundCloud',
                         'YouTube'
                 ]) {
                         try {
