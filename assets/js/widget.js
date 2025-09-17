@@ -172,7 +172,8 @@ class RssFinder extends HTMLElement {
                         'Reddit',
                         'Patreon',
                         'SoundCloud',
-                        'YouTube'
+                        'YouTube',
+                        'RSS-Bridge'
                 ]) {
                         try {
                                 const s = await import(`./subscribers/${routeName}.js`);
