@@ -120,7 +120,7 @@ class RssFinder extends HTMLElement {
         #subscribers = {};      // available subscribers
         settings = {
                 // Note: we treat all settings as strings
-                "show-title"     : "false",
+                "show-title"     : "true",
                 "scheme"         : "feed:",
                 "use-cors-proxy" : "false",
                 "cors-proxy"     : "https://corsproxy.io/?url=",
