@@ -13,14 +13,15 @@ export class SubscriberView {
                 <button>Back to Overview</button>
             </nav>
 
-            <h1><img class="favicon" src="icons/{{favicon}}"></img> {{title}}</h1>
+            <h1><img class="favicon" src="{{settings.icon-path}}/{{favicon}}"></img> {{title}}</h1>
 
             <div id='subscriberView'>
             </div>
         `), {
             name: s.name,
             favicon: s.favicon,
-            title: s.title?s.title:`Find feeds on ${s.name}`
+            title: s.title?s.title:`Find feeds on ${s.name}`,
+            settings: window.RssFinder.settings
         });
         new s.class(el.querySelector("#subscriberView"));
 

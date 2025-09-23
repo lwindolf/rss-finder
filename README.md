@@ -10,41 +10,36 @@ Intended to be embedded into feed reader apps.
 
 ## Embed as a webcomponent
 
-### Remote
-
-1. Include the sources
-
-        <script src="https://lwindolf.github.io/rss-finder/assets/js/vendor/handlebars.min.js"></script>
-        <script type="module" src="https://lwindolf.github.io/rss-finder/assets/js/widget.js"></script>
-
-2. Add `<x-rss-finder></x-rss-finder>` in your web app
-
-### Embed in your code base
-
 1. Copy the `assets` directory to your code base as `rss-finder`
 2. Include the sources 
 
         <script src="rss-finder/js/vendor/handlebars.min.js"></script>
         <script type="module" src="rss-finder/js/widget.js"></script>
 
-3. Add `<x-rss-finder></x-rss-finder>` in your web app
+3. Use the `<x-rss-finder icons='rss-finder/icons'>` custom HTML element in your web app.
 
 ## Configuration Parameters
 
 The following configuration parameter can be passed to an iframe via query
 string or to the web component as attributes. For example
 
-     https://lwindolf.github.io/rss-finder?show-title=true
+     https://lwindolf.github.io/rss-finder?show-title=false&scheme=web%2Bfeed%3A
 
 or
 
-     <x-rss-finder show-title="true" use-cors-proxy="true" scheme="web+feed:"></x-rss-finder>
+     <x-rss-finder
+        show-title="true"
+        use-cors-proxy="true"
+        scheme="web+feed:"
+        icons="rss-finder/icons">
+     </x-rss-finder>
 
 The following parameters are supported
 
 | Parameter         | Description                                                     | Default          |
 |-------------------|-----------------------------------------------------------------|------------------|
 | show-title        | Whether to add a `<h1>` title                                   | `true`           |
+| icon-path         | Path to subscriber icons (adapt it when using as webcomponent)  | `icons`          |
 | scheme            | Which URI scheme to trigger for subscriptions                   | `feed:`          |
 | use-cors-proxy    | Whether to retry using a CORS proxy when a network error occurs | `false`          |
 | cors-proxy        | URL of a cors proxy to use                                      | `https://corsproxy.io/` |

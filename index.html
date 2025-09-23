@@ -22,7 +22,7 @@
                         const params = new URLSearchParams(window.location.search);
                         const rssFinder = document.createElement('x-rss-finder');
                         params.forEach((value, key) => {
-                                if (['show-title', 'scheme', 'use-cors-proxy', 'cors-proxy', 'target'].includes(key)) {
+                                if (Object.keys(window.RssFinder.settings).includes(key)) {
                                         rssFinder.setAttribute(key, value);
                                 }
                         });
