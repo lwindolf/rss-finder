@@ -15,11 +15,23 @@
                                 padding:24px;
                         }
                 </style>
-                <script src="assets/js/vendor/handlebars.min.js"></script>
-                <script type="module" src="assets/js/widget.js"></script>
-                <link rel="icon" type="image/svg+xml" href="assets/icons/default.svg">
+                <base href="assets/">
+                <script src="js/vendor/handlebars.min.js"></script>
+                <script type="module" src="js/widget.js"></script>
+                <script type="module">
+                        const params = new URLSearchParams(window.location.search);
+                        const rssFinder = document.createElement('x-rss-finder');
+                        params.forEach((value, key) => {
+                                if (['show-title', 'scheme', 'use-cors-proxy', 'cors-proxy', 'target'].includes(key)) {
+                                        rssFinder.setAttribute(key, value);
+                                }
+                        });
+                        document.body.innerHTML = '';
+                        document.body.appendChild(rssFinder);
+                </script>
+                <link rel="icon" type="image/svg+xml" href="icons/default.svg">
         </head>
-        <x-rss-finder show-title="true">
-                ERROR: Failed to load the RSS Finder widget.
-        </x-rss-finder>
+        <body>
+                Loading...
+        </body>
 </html>

@@ -1,5 +1,3 @@
-//https://news.google.com/rss/search?hl=en-US&gl=US&ceid=US%3Aen&oc=11&q=technology%20news
-
 // vim: set ts=4 sw=4:
 import { Subscriber } from "../Subscriber.js";
 

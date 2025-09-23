@@ -38,14 +38,14 @@ string or to the web component as attributes. For example
 
 or
 
-     <x-rss-finder show-title="true" use-cors-proxy="true"></x-rss-finder>
+     <x-rss-finder show-title="true" use-cors-proxy="true" scheme="web+feed:"></x-rss-finder>
 
 The following parameters are supported
 
 | Parameter         | Description                                                     | Default          |
 |-------------------|-----------------------------------------------------------------|------------------|
 | show-title        | Whether to add a `<h1>` title                                   | `false`          |
-| uri-scheme        | Which scheme to trigger for subscriptions                       | `feed:`          |
+| scheme            | Which URI scheme to trigger for subscriptions                   | `feed:`          |
 | use-cors-proxy    | Whether to retry using a CORS proxy when a network error occurs | `false`          |
 | cors-proxy        | URL of a cors proxy to use                                      | `https://corsproxy.io/` |
 | target            | When subscribing which location target to use                   | `_blank`         |

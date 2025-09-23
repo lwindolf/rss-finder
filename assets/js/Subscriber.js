@@ -64,7 +64,7 @@ export class Subscriber {
 
     preview(url) {
         console.log(`Previewing feed: ${url}`);
-        document.dispatchEvent(new CustomEvent('preview', {
+        document.dispatchEvent(new CustomEvent('rss-finder-preview', {
             detail: url
         }));
     }

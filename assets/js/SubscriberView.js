@@ -10,10 +10,10 @@ export class SubscriberView {
         console.log(s);
         r.renderElement(el, r.template(`
             <nav>
-                <a href='' name='go-back'>Go Back</a>
+                <button>Back to Overview</button>
             </nav>
 
-            <h1><img class="favicon" src="assets/icons/{{favicon}}"></img> {{title}}</h1>
+            <h1><img class="favicon" src="icons/{{favicon}}"></img> {{title}}</h1>
 
             <div id='subscriberView'>
             </div>
@@ -24,7 +24,11 @@ export class SubscriberView {
         });
         new s.class(el.querySelector("#subscriberView"));
 
-        document.addEventListener('preview', (ev) => {
+        el.querySelector("nav button").addEventListener("click", () => {
+            document.dispatchEvent(new CustomEvent('rss-finder-back'));
+        });
+
+        document.addEventListener('rss-finder-preview', (ev) => {
             this.#preview(ev.detail);
         });
     }
@@ -45,6 +49,7 @@ export class SubscriberView {
         */
 
         // Right now we habe no preview, so we directly subscribe
+        console.log(`Launching '${window.RssFinder.settings['scheme']}${url}'`);
         window.open(
             window.RssFinder.settings['scheme']+url,
             window.RssFinder.settings['target']
