@@ -20,10 +20,10 @@ export class SubscriberImpl extends SearchForm {
                                 <img src='{{avatar}}'/>
                             </div>
                             <div class='resultDetails'>
-                                <div class='resultTitle'><a href="https://mastodon.social/@{{username}}">@{{username}}</a> -- {{display_name}}</div>
+                                <div class='resultTitle'><a href="{{url}}">{{acct}}</a> -- {{display_name}}</div>
                                 <div class='resultProfile'>{{{note}}}</div>
                                 <div class='resultGenre'></div>
-                                <div class='resultFeedHidden'>https://mastodon.social/@{{username}}.rss</div>
+                                <div class='resultFeedHidden'>{{url}}.rss</div>
                                 <button class='subscribe'>Subscribe</button>
                             </div>
                         </div>
