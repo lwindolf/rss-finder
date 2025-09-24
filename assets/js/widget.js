@@ -1,7 +1,6 @@
 // vim: set ts=4 sw=4:
 
 import { SubscriberOverview } from "./SubscriberOverview.js";
-import { SubscribeErrorView } from "./SubscribeError.js";
 
 // Implements <x-rss-finder> web component
 
