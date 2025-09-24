@@ -1,6 +1,7 @@
 // vim: set ts=4 sw=4:
 
 import { SubscriberOverview } from "./SubscriberOverview.js";
+import { SubscribeErrorView } from "./SubscribeError.js";
 
 // Implements <x-rss-finder> web component
 
@@ -145,7 +146,8 @@ class RssFinder extends HTMLElement {
                 // Collect parameters from URL query string
                 const queryParams = new URLSearchParams(window.location.search);
                 for(const [key, value] of queryParams.entries()) {
-                        this.settings[key] = value;
+                        if (key in this.settings)
+                                this.settings[key] = value;
                 }
 
                 this.content = document.createElement('div');
