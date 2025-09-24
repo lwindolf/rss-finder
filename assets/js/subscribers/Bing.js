@@ -20,7 +20,7 @@ export class SubscriberImpl extends Subscriber {
             </div>
         `, {});
 
-        el.getRootNode().getElementById('link-form').addEventListener('submit', () => {
+        el.getRootNode().getElementById('search-form').addEventListener('submit', () => {
             let search = el.getRootNode().getElementById('search-input').value.trim();
             this.preview(`https://www.bing.com/search?q=${encodeURI(search)}&format=rss`);
         });
