@@ -43,7 +43,6 @@ The following parameters are supported
 | scheme            | Which URI scheme to trigger for subscriptions                   | `feed:`          |
 | use-cors-proxy    | Whether to retry using a CORS proxy when a network error occurs | `false`          |
 | cors-proxy        | URL of a cors proxy to use                                      | `https://corsproxy.io/` |
-| target            | When subscribing which location target to use                   | `_blank`         |
 
 ## Privacy considerations
 
@@ -60,4 +59,9 @@ knowing about the feeds they subscribe to).
 
 ### Accessing 3rd party APIs
 
-Some sources access 3rd party APIs for example the iTunes subscriber.
+Some sources access 3rd party APIs for example 
+
+- iTunes
+- Mastodon
+- BlueSky
+- Lemmy
