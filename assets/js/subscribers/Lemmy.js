@@ -19,7 +19,7 @@ export class SubscriberImpl extends SearchForm {
                         {{#with community}}
                         <div class='result block'>
                             <div class='resultImage'>
-                                <img src='{{icon}}'/>
+                                <img src='{{icon}}' loading='lazy'/>
                             </div>
                             <div class='resultDetails'>
                                 <div class='resultTitle'><a href="{{actor_id}}">{{name}}</a> -- {{title}}</div>

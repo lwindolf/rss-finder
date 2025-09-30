@@ -17,7 +17,7 @@ export class SubscriberImpl extends SearchForm {
                     {{#each results}}
                         <div class='result block'>
                             <div class='resultImage'>
-                                <img src='{{avatar}}'/>
+                                <img src='{{avatar}}' loading='lazy'/>
                             </div>
                             <div class='resultDetails'>
                                 <div class='resultTitle'><a href="{{url}}">{{acct}}</a> -- {{display_name}}</div>
