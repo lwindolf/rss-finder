@@ -21,7 +21,7 @@ export class SubscriberImpl extends SearchForm {
                             <div class='resultDetails'>
                                 <div class='resultTitle'><a href="https://bsky.app/profile/{{handle}}">{{displayName}}</a> -- @{{handle}}</div>
                                 <div class='resultProfile'>{{description}}</div>
-                                <div class='resultFeedHidden'>https://bsky.app/profile/{{handle}}</div>
+                                <div class='resultFeedHidden'>https://bsky.app/profile/{{handle}}/rss</div>
                                 <button class='subscribe'>Subscribe</button>
                             </div>
                         </div>
