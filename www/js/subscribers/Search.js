@@ -55,6 +55,7 @@ export class SubscriberImpl extends Subscriber {
                 }
 
                 // concatenate chunks into single Uint8Array
+                // eslint-disable-next-line no-undef
                 let chunksAll = new Uint8Array(receivedLength);
                 let position = 0;
                 for(let chunk of chunks) {
