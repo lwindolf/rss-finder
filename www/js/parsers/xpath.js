@@ -5,6 +5,7 @@
 class XPath {
         static evaluate(node, expr) {
                 // Workaround https://github.com/jsdom/jsdom/issues/2997
+                // eslint-disable-next-line no-undef
                 if (!Object.getOwnPropertyDescriptor(globalThis, 'window')?.get?.toString().includes('[native code]') ?? false)
                         expr = expr.replaceAll('ns:', '')
 
