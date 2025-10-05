@@ -4,7 +4,12 @@ if (!window.Handlebars)
     window.Handlebars = require('handlebars');
 
 test("SubscriberOverview", async () => {
-
+    window.RssFinder = {
+        settings: {
+            "show-title": "true",
+            "icon-path": "icons"
+        }
+    };
     let s = await import("../www/js/SubscriberOverview.js");
     new s.SubscriberOverview('body');
 

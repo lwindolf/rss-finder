@@ -10,13 +10,14 @@ Intended to be embedded into feed reader apps.
 
 ## Embed as a webcomponent
 
-1. Copy the `assets` directory to your code base as `rss-finder`
-2. Include the sources 
+1. `npm run build`
+2. Copy the `www` directory to your code base as `rss-finder`
+3. Include the sources 
 
         <script src="rss-finder/js/vendor/handlebars.min.js"></script>
         <script type="module" src="rss-finder/js/widget.js"></script>
 
-3. Use the `<x-rss-finder icons='rss-finder/icons'>` custom HTML element in your web app.
+4. Use the `<x-rss-finder icons='rss-finder/icons'>` custom HTML element in your web app.
 
 ## Configuration Parameters
 

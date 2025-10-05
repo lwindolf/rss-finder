@@ -1,0 +1,31 @@
+// vim: set ts=4 sw=4:
+import { Subscriber } from "../Subscriber.js";
+
+export class SubscriberImpl extends Subscriber {
+	static name = "YouTube";
+	static favicon = "youtube.png";
+
+	constructor(el) {
+		super();
+
+		this.render(el, `
+			<div class="block">
+				<form id="youtubeForm">
+					<p>
+						Please enter the YouTube channel id (something like "UCxxxxxxxxxxxxxx") to subscribe to the channel.
+						To find the channel id on any YouTube channel open the HTML source view and search for "channel/UC".
+						Type the value of "UCxxxxxxxxxxxxxx" into the field below.
+					</p>
+					<input type="text" id="channelId" name="channelId" placeholder="YouTube Channel ID" required>
+					<button type="submit">Preview</button>
+				</form>
+			</div>
+        `, {});
+
+		el.getRootNode().getElementById('youtubeForm').addEventListener('submit', (event) => {
+			event.preventDefault();
+			const channelId = el.getRootNode().getElementById('channelId').value;
+			this.preview(`https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`, el.querySelector(".block"));
+		});
+	}
+}
