@@ -269,6 +269,7 @@ class RssFinder extends HTMLElement {
                         'dev.to',
                         'Tumblr',
                         'DeviantArt',
+                        'Medium',
                         'Patreon',
                         'SoundCloud',
                         'YouTube',
