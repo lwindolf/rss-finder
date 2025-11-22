@@ -10,7 +10,7 @@ window.Handlebars = {
 
 const outputFile = path.join('www', 'js', 'SubscriberList.js');
 const subscriberPath = path.join('www', 'js', 'subscribers');
-const subscriberFiles = fs.readdirSync(subscriberPath).filter(file => file.endsWith('.js'));
+const subscriberFiles = fs.readdirSync(subscriberPath).filter(file => file.endsWith('.js')).sort();
 
 let subscribers = [];
 await Promise.all(subscriberFiles.map(async file => {
@@ -27,7 +27,7 @@ await Promise.all(subscriberFiles.map(async file => {
 console.log(`Writing ${outputFile} ...`);
 fs.writeFileSync(outputFile, `
 export class SubscriberList {
-    static #subscribers = ${JSON.stringify(subscribers, null, 2)};
+    static #subscribers = ${JSON.stringify(subscribers.sort((a, b) => a.module.localeCompare(b.module)), null, 2)};
 
     static getByName = (name) => SubscriberList.#subscribers.find(s => s.name === name);
     static getAll = () => SubscriberList.#subscribers;
