@@ -3,30 +3,28 @@
 // Simple view where the user can select all available feed discovery types.
 // Servers as start page for the user.
 
+import { SubscriberList } from "./SubscriberList.js";
 import { SubscriberView } from "./SubscriberView.js";
 import * as r from "./helpers/render.js";
 
 export class SubscriberOverview {
-	constructor(el, subscribers) {
-		this.#render(el, subscribers);
+	constructor(el) {
+		this.#render(el);
 
 		el.addEventListener("click", (event) => {
 			const div = event.target.closest(".subscriber");
 			if (div) {
 				event.preventDefault();
-				const routeName = div.parentElement.name;
-				if (routeName) {
-					new SubscriberView(el, subscribers[routeName]);
-				}
+				new SubscriberView(el, div.dataset.name);
 			}
 		});
 
 		document.addEventListener('rss-finder-back', () => {
-			this.#render(el, subscribers);
+			this.#render(el);
 		});
 	}
 
-	#render(el, subscribers) {
+	async #render(el) {
 		r.renderElement(el, r.template(`
 			{{#compare settings.show-title "==" "true"}}
 			<h1>Discover Feeds</h1>
@@ -34,8 +32,8 @@ export class SubscriberOverview {
 
 			<div class='subscriberList'>
 				{{#each subscribers}}
-					<a name='{{routeName}}'>
-						<div class='subscriber block'>
+					<a name='{{name}}'>
+						<div class='subscriber block' data-name='{{name}}'>
 							<img src='{{../settings.icon-path}}/{{favicon}}'/>
 							<div class='subscriberTitle'>{{name}}</div>
 						</div>
@@ -43,7 +41,7 @@ export class SubscriberOverview {
 				{{/each}}
 			</div>
 		`), {
-			subscribers,
+			subscribers: SubscriberList.getAll(),
 			settings: window.RssFinder.settings
 		});
 	}

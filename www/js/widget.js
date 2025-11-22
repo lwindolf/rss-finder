@@ -244,51 +244,7 @@ class RssFinder extends HTMLElement {
 
                 this.content = document.createElement('div');
                 this.shadowRoot.appendChild(this.content);
-                this.loadOverview();
-        }
-
-        async loadOverview() {
-                this.#subscribers = {};
-
-                // FIXME: generate JSON list using build.sh
-                for(const routeName of [
-                        'Search',
-                        'Default',                        
-                        'killthenewsletter',
-                        'arxiv.org',
-                        'Archive.org',
-                        'Google',
-                        'GoogleNews',
-                        'Bing',
-                        'iTunes',
-                        'Mastodon',
-                        'Bluesky',
-                        'Lemmy',
-                        'Reddit',
-                        'Flickr',
-                        'dev.to',
-                        'Tumblr',
-                        'DeviantArt',
-                        'Medium',
-                        'Patreon',
-                        'SoundCloud',
-                        'YouTube',
-                        'RSS-Bridge'
-                ]) {
-                        try {
-                                const s = await import(`./subscribers/${routeName}.js`);
-                                this.#subscribers[routeName] = {
-                                        name      : s.SubscriberImpl.name,
-                                        favicon   : s.SubscriberImpl.favicon,
-                                        title     : s.SubscriberImpl.title,
-                                        class     : s.SubscriberImpl,
-                                        routeName
-                                }
-                        } catch(e) {
-                                console.error(`Failed to load subscriber ${routeName}: ${e}`);
-                        }
-                }                
-                new SubscriberOverview(this.content, this.#subscribers);
+                new SubscriberOverview(this.content);
         }
 }
 

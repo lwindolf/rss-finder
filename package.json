@@ -2,8 +2,10 @@
   "scripts": {
     "test": "eslint --ignore-pattern www/js/vendor/* www/js",
     "build": "./build.sh",
+    "build.js": "node build.js",
     "start": "npx serve -S"
   },
+  "type": "module",
   "jest": {
     "verbose": true,
     "transform": {

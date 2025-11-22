@@ -4,6 +4,7 @@
 // Factory for subscriber implementations.
 
 import { FeedUpdater } from "./feedupdater.js";
+import { SubscriberList } from "./SubscriberList.js";
 import * as r from "./helpers/render.js";
 
 export class SubscriberView {
@@ -11,32 +12,37 @@ export class SubscriberView {
     #el;
     #feed;
 
-    constructor(el, s) {
+    constructor(el, name) {
         this.#el = el;
 
-        r.renderElement(el, r.template(`
-            <nav>
-                <button>Back to Overview</button>
-            </nav>
+        const module = SubscriberList.getByName(name).module;
+        import(`./subscribers/${module}`).then((m) => {
+            const s = m.SubscriberImpl;
 
-            <h1><img class="favicon" src="{{settings.icon-path}}/{{favicon}}"></img> {{title}}</h1>
+            r.renderElement(el, r.template(`
+                <nav>
+                    <button>Back to Overview</button>
+                </nav>
 
-            <div id='subscriberView'>
-            </div>
-        `), {
-            name: s.name,
-            favicon: s.favicon,
-            title: s.title?s.title:`Find feeds on ${s.name}`,
-            settings: window.RssFinder.settings
-        });
-        new s.class(el.querySelector("#subscriberView"));
+                <h1><img class="favicon" src="{{settings.icon-path}}/{{favicon}}"></img> {{title}}</h1>
 
-        el.querySelector("nav button").addEventListener("click", () => {
-            document.dispatchEvent(new CustomEvent('rss-finder-back'));
-        });
+                <div id='subscriberView'>
+                </div>
+            `), {
+                name: s.name,
+                favicon: s.favicon,
+                title: s.title?s.title:`Find feeds on ${s.name}`,
+                settings: window.RssFinder.settings
+            });
+            new s(el.querySelector("#subscriberView"));
 
-        document.addEventListener('rss-finder-preview', (ev) => {
-            this.#preview(ev.detail.url, ev.detail.el);
+            el.querySelector("nav button").addEventListener("click", () => {
+                document.dispatchEvent(new CustomEvent('rss-finder-back'));
+            });
+
+            document.addEventListener('rss-finder-preview', (ev) => {
+                this.#preview(ev.detail.url, ev.detail.el);
+            });
         });
     }
 
