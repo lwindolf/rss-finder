@@ -171,6 +171,15 @@ export class SubscriberView {
         //
         // To avoid blank pages we reopen the original link with a timeout.
         // (https://stackoverflow.com/questions/24779312/simplest-cross-browser-check-if-protocol-handler-is-registered)
+        //
+        // Additionally there is a setting to launch via fetch() instead of window.location
+
+        if(window.RssFinder.settings['launch-with-fetch']) {
+            fetch(window.RssFinder.settings['scheme']+url).catch((e) => {
+                console.warn("Failed to launch via fetch:", e);
+            });
+            return;
+        }
 
         const oldLocation = window.location;
         setTimeout(function() {

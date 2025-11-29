@@ -43,7 +43,8 @@ The following parameters are supported
 | icon-path         | Path to subscriber icons (adapt it when using as webcomponent)  | `icons`          |
 | scheme            | Which URI scheme to trigger for subscriptions                   | `feed:`          |
 | use-cors-proxy    | Whether to retry using a CORS proxy when a network error occurs | `false`          |
-| cors-proxy        | URL of a cors proxy to use                                      | `https://corsproxy.io/` |
+| cors-proxy        | URL of a cors proxy to use                                      | `https://corsproxy.io/?url=` |
+| launch-with-fetch | Wether to subscribe via fetch() call or via window.location     | `false`          |
 
 ## Privacy considerations
 

@@ -2,8 +2,6 @@
 
 // Simple fetch wrapper to allow for automatic CORS proxy
 
-import { Config } from './config.js';
-
 // Fetch and URL normally or via CORS proxy
 async function pfetch(url, options = {}, CORS = false) {
     const controller = new AbortController();
@@ -16,7 +14,7 @@ async function pfetch(url, options = {}, CORS = false) {
             return await fetch(url, options);
 
         // We expect only CORS proxy URLs where we just need to add the encoded URL
-        return await fetch(Config.corsProxy+encodeURI(url), options);
+        return await fetch(window.RssFinder.settings["cors-proxy"] + encodeURI(url), options);
     } catch (error) {
         console.error('Fetch error:', error);
     } finally {
