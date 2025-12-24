@@ -33,11 +33,10 @@ export class SubscriberImpl extends SearchForm {
                     results: data.actors
                 });
 
-                el.getRootNode().querySelectorAll('.resultDetails').forEach((details) => {
+                el.getRootNode().querySelectorAll('.result').forEach((details) => {
                     details.addEventListener('click', (ev) => {
                         ev.preventDefault();
-                        const result = ev.target.closest('.result');
-                        this.preview(result.querySelector('.resultFeedHidden').textContent, result);
+                        this.preview(details.querySelector('.resultFeedHidden').textContent, details);
                     });
                 });
             }

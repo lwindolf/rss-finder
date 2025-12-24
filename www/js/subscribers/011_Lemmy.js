@@ -13,7 +13,6 @@ export class SubscriberImpl extends SearchForm {
             (query) =>
                 `https://lemmy.ml/api/v3/search?type_=Communities&q=${encodeURIComponent(query)}`,
             (el, data) => {
-                console.log(data);
                 this.render(el, `
                     {{#each results}}
                         {{#with community}}
@@ -26,7 +25,6 @@ export class SubscriberImpl extends SearchForm {
                                 <div class='resultProfile'>{{description}}</div>
                                 <div class='resultGenre'></div>
                                 <div class='resultFeedHidden'>{{../feed}}</div>
-                                <button class='subscribe'>Subscribe</button>
                             </div>
                         </div>
                         {{/with}}
@@ -35,7 +33,6 @@ export class SubscriberImpl extends SearchForm {
                     {{/each}}
                 `, {
                     results: data.communities.map(c => {
-                        console.log(c);
                         return {
                             ...c,
                             // actor_id is something like https://lemmy.ml/c/Name
@@ -45,10 +42,10 @@ export class SubscriberImpl extends SearchForm {
                     })
                 });
 
-                el.getRootNode().querySelectorAll('.resultDetails button.subscribe').forEach((button) => {
-                    button.addEventListener('click', (ev) => {
-                        const result = ev.target.closest('.result');
-                        this.preview(result.querySelector('.resultFeedHidden').textContent);
+                el.getRootNode().querySelectorAll('.result').forEach((details) => {
+                    details.addEventListener('click', (ev) => {
+                        ev.preventDefault();
+                        this.preview(details.querySelector('.resultFeedHidden').textContent, details);
                     });
                 });
             }
