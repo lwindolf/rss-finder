@@ -141,6 +141,10 @@ export class SubscriberView {
         if(!item)
             return;
 
+        /* Set title for it to appear in e.g. desktop MPRIS playback controls */
+        if(item.title)
+            document.title = item.title;
+
         el.querySelectorAll(`.itemlist .item.selected`).forEach(e => e.classList.remove("selected"));
         el.querySelector(`.itemlist .item[data-idx='${idx}']`).classList.add("selected");
 
