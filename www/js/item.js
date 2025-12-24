@@ -59,7 +59,7 @@ export class Item {
             /* Never add enclosures for images already contained in the description */
             if (this.description && -1 !== this.description.indexOf(url))
                 return;
-console.log('add media', url, mime, length);
+
             this.media.push({ url, mime, length: l });
         }
 

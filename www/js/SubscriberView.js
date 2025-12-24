@@ -67,12 +67,22 @@ export class SubscriberView {
 
         if (this.#feed.newItems) {
             this.#feed.newItems = this.#feed.newItems.slice(0, 100); // limit preview to 100 items
-            this.#feed.newItems.forEach(i => {
-                i.date = new Date(i.time*1000).toLocaleString();
-                if(!i.title || i.title.trim().length == 0) {
-                    i.title = i.date;
-                    i.date = "";
-                }
+            this.#feed.newItems.forEach(item => {
+                item.date = new Date(item.time*1000).toLocaleString();
+
+                // Fix missing title (provide result in item.title2)
+                if (!item.title || item.title.trim().length === 0)
+                    if (item.description && item.description.length > 0) {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(item.description, 'text/html');
+                        const textContent = doc.body.textContent || '';
+                        item.title2 = textContent.substring(0, 100) + (textContent.length > 100 ? '...' : '');
+                        console.log("Fixed item title", item.title);
+                    } else {
+                        item.title2 = 'No title';
+                    }
+                else
+                    item.title2 = item.title;
             });
         }
 
@@ -84,8 +94,8 @@ export class SubscriberView {
                     <div class="itemlist">
                         {{#each feed.newItems}}
                             <div class="item" data-idx="{{@index}}">
-                                <div class="title">{{this.title}}</div>
-                                <div class="date">{{this.date}}</div>
+                                <div class="title">{{title2}}</div>
+                                <div class="date">{{date}}</div>
                             </div>
                         {{else}}
                             <p>No items found in this feed.</p>
@@ -135,7 +145,13 @@ export class SubscriberView {
         el.querySelector(`.itemlist .item[data-idx='${idx}']`).classList.add("selected");
 
         r.renderElement(el.querySelector(".itemview"), r.template(`
-            <h2 class="title"><a href="{{item.source}}" target="_blank">{{item.title}}</a></h2>
+            <h2 class="title">
+                {{#if item.title}}
+                    <a target='_system' href='{{item.source}}'>{{item.title}}</a>
+                {{else}}
+                    <a target='_system' class='missingTitle' href='{{item.source}}'>Link to post</a>
+                {{/if}}
+            </h2>
             <div class="date">{{item.date}}</div>
             <div class="content">
                 <div class="media">

@@ -184,7 +184,7 @@ h1 img.favicon {
         overflow-y: scroll;
         border: 1px solid #777;
 }
-.itemview .title a {
+.itemview .title a:not(.missingTitle) {
         text-decoration: none;
         color: #222;
 }
