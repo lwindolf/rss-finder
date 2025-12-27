@@ -215,7 +215,9 @@ export class SubscriberView {
 
         if(method === 'event') {
             document.dispatchEvent(new CustomEvent('rss-finder-subscribe', {
-                detail: { url }
+                detail: { url },
+                bubbles: true,
+                composed: true
             }));
             return;
         }
