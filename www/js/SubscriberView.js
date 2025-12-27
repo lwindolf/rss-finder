@@ -180,34 +180,46 @@ export class SubscriberView {
     }
 
     #launch(url) {
-        // Right now we habe no preview, so we directly subscribe
-        console.log(`Launching '${window.RssFinder.settings['scheme']}${url}'`);
+        const method = window.RssFinder.settings['launch-method'];
 
-        // Custom URI scheme launching is somewhat complicated
-        //
-        // - Firefox (without default "No ask" handler): OK shows a dialog, does not open the link
-        // - Firefox (with default "No ask" handler): blank page
-        // - Chrome/Webkit: blank page
-        //
-        // To avoid blank pages we reopen the original link with a timeout.
-        // (https://stackoverflow.com/questions/24779312/simplest-cross-browser-check-if-protocol-handler-is-registered)
-        //
-        // Additionally there is a setting to launch via fetch() instead of window.location
+        console.log(`Launching URL '${url}' with method '${method}'`);
 
-        if(window.RssFinder.settings['launch-with-fetch']) {
+        if(method === 'fetch') {
+            console.log(`Fetch using schema URL '${window.RssFinder.settings['scheme']}${url}'`);
             fetch(window.RssFinder.settings['scheme']+url).catch((e) => {
                 console.warn("Failed to launch via fetch:", e);
             });
             return;
         }
 
-        const oldLocation = window.location;
-        setTimeout(function() {
-            // Do not overwrite needlessly (so current subscriber page stays visible)
-            if(window.location !== oldLocation)
-                window.location = oldLocation;
-        }, 200);
+        if(method === 'location') {
+            // Custom URI scheme launching via location is somewhat complicated
+            //
+            // - Firefox (without default "No ask" handler): OK shows a dialog, does not open the link
+            // - Firefox (with default "No ask" handler): blank page
+            // - Chrome/Webkit: blank page
+            //
+            // To avoid blank pages we reopen the original link with a timeout.
+            // (https://stackoverflow.com/questions/24779312/simplest-cross-browser-check-if-protocol-handler-is-registered)
 
-        window.open(window.RssFinder.settings['scheme']+url, '_self');
+            const oldLocation = window.location;
+            setTimeout(function() {
+                // Do not overwrite needlessly (so current subscriber page stays visible)
+                if(window.location !== oldLocation)
+                    window.location = oldLocation;
+            }, 200);
+
+            window.open(window.RssFinder.settings['scheme']+url, '_self');
+            return;
+        }
+
+        if(method === 'event') {
+            document.dispatchEvent(new CustomEvent('rss-finder-subscribe', {
+                detail: { url }
+            }));
+            return;
+        }
+
+        console.error("Unsupported launch method:", method);
     }
 }

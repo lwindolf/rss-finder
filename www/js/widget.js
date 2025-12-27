@@ -218,7 +218,7 @@ class RssFinder extends HTMLElement {
                 "use-cors-proxy"    : "false",
                 "cors-proxy"        : "https://corsproxy.io/?url=",
                 "icon-path"         : "icons",
-                "launch-with-fetch" : "false"
+                "launch-method"     : "fetch"
         };
 
         constructor() {

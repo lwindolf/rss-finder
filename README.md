@@ -2,40 +2,57 @@
 
 A simple web component finding RSS feeds for different sources.
 
-Intended to be embedded into feed reader apps.
+Intended embedded use cases:
 
-## Embed via iframe
+| Use Case                              | Embed Type    | Used by  |
+|---------------------------------------|---------------|----------|
+| Progressive web app RSS reader        | web component | lzone.de |
+| Native RSS app with browser widget    | website       | Liferea  |
+| Native RSS app without browser widget | launch in default browser | |
+ 
+## Embed as website
 
-    <iframe src="https://lwindolf.github.io/rss-finder" width="100%" height="800px"></iframe>
+In a native app open a HTML widget and launch the URL
 
-## Embed as a webcomponent
+    https://lwindolf.github.io/rss-finder?launch-method=fetch&show-title=false
+    
+
+If possible do disable CORS, if it is not possible enable the CORS proxy by adding
+`use-cors-proxy=true` to the query string. 
+
+If your app does not `feed:` as protocol handler set a `scheme` value in the query string.
+
+If your app does not have a browser widget you can still provide a menu option
+like "Discover Feeds" and open the the RSS Finder URL using Linux `xdg-open` or the 
+corresponding GUI toolkit method to launch RSS Finder in the users default browser.
+Your app will receive the subscribed feed URLs via the defined URI scheme.
+
+## Embed as a web component
 
 1. `npm run build`
 2. Copy the `www` directory to your code base as `rss-finder`
 3. Include the sources 
 
-        <script src="rss-finder/js/vendor/handlebars.min.js"></script>
-        <script type="module" src="rss-finder/js/widget.js"></script>
+       <script src="rss-finder/js/vendor/handlebars.min.js"></script>
+       <script type="module" src="rss-finder/js/widget.js"></script>
 
-4. Use the `<x-rss-finder icons='rss-finder/icons'>` custom HTML element in your web app.
+4. Use the custom HTML element in your web app.
+
+       <x-rss-finder icons="rss-finder/icons" launch-method="event" use-cors-proxy="true">
+
+5. Register an subscribe event handler
+
+       document.querySelector('x-rss-finder').addEventListener('rss-finder-subscribe', (ev) => {
+          alert(`Subscribing to feed URL ${ev.detail.url}`);
+       });
+
+Note: due to "web+" custom protocol handlers not working together with CSP and CORS
+when used as a web component `launch-method` needs to be `event`.
 
 ## Configuration Parameters
 
-The following configuration parameter can be passed to an iframe via query
-string or to the web component as attributes. For example
-
-     https://lwindolf.github.io/rss-finder?show-title=false&scheme=web%2Bfeed%3A
-
-or
-
-     <x-rss-finder
-        show-title="true"
-        use-cors-proxy="true"
-        scheme="web+feed:"
-        icons="rss-finder/icons">
-     </x-rss-finder>
-
-The following parameters are supported
+Configuration parameters are to be passed by query string for iframe embedding or by 
+by attribute when including as web component. The following parameters are supported:
 
 | Parameter         | Description                                                     | Default          |
 |-------------------|-----------------------------------------------------------------|------------------|
@@ -44,7 +61,7 @@ The following parameters are supported
 | scheme            | Which URI scheme to trigger for subscriptions                   | `feed:`          |
 | use-cors-proxy    | Whether to retry using a CORS proxy when a network error occurs | `false`          |
 | cors-proxy        | URL of a cors proxy to use                                      | `https://corsproxy.io/?url=` |
-| launch-with-fetch | Wether to subscribe via fetch() call or via window.location     | `false`          |
+| launch-method     | How to subscribe (via `fetch` using the define schema, via setting `location` to the feed URI or via `event`) | `fetch`          |
 
 ## Privacy considerations
 
@@ -61,9 +78,11 @@ knowing about the feeds they subscribe to).
 
 ### Accessing 3rd party APIs
 
-Some sources access 3rd party APIs for example 
+Some subscriber access 3rd party APIs:
 
 - iTunes
 - Mastodon
 - BlueSky
 - Lemmy
+
+Any search will be exposed to those providers.
