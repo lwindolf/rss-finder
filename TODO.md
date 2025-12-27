@@ -1,15 +1,9 @@
-- SubscriberOverview class
-  - GUI to select a Subscriber
-  - very visual: Kacheln mit Favicon
-  - DnD target for URLs
-  - generic target
+TODO:
 
-- Subscriber class
-  - provides one or more inputs
-  - reconciles inputs until they are done
-  - inputs can mutate
-  - has one or more exclusive base URLs
-  - emits a signal with a result once ready
+- Dark Mode support, currently fails when embedding
+- Solve subscriber name overflow (switch to non-square layout)
+
+Maybe:
 
 - Fallback Content Extraction
   - HTML XPath extract expressions
@@ -22,13 +16,6 @@
   - default paths for title and content
   - optional parameters to pass other selectors
     provided by content extractor GUI 
-
-- Preview
-  - pre-renders currently selected feed
-  - style sheet?
-  - render template?
-  - Accept preview -> return result
-  - Cancel/Back -> restart Subsriber/go to Menu
 
 - API
   - input
