@@ -210,7 +210,6 @@ h1 img.favicon {
 
 class RssFinder extends HTMLElement {
         // state
-        #subscribers = {};      // available subscribers
         settings = {
                 // Note: we treat all settings as strings
                 "show-title"        : "true",
@@ -218,7 +217,7 @@ class RssFinder extends HTMLElement {
                 "use-cors-proxy"    : "false",
                 "cors-proxy"        : "https://corsproxy.io/?url=",
                 "icon-path"         : "icons",
-                "launch-method"     : "fetch"
+                "subscribe-method"  : "location"
         };
 
         constructor() {

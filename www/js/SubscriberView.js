@@ -180,7 +180,7 @@ export class SubscriberView {
     }
 
     #launch(url) {
-        const method = window.RssFinder.settings['launch-method'];
+        const method = window.RssFinder.settings['subscribe-method'];
 
         console.log(`Launching URL '${url}' with method '${method}'`);
 

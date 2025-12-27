@@ -14,7 +14,7 @@ Intended embedded use cases:
 
 In a native app open a HTML widget and launch the URL
 
-    https://lwindolf.github.io/rss-finder?launch-method=fetch&show-title=false
+    https://lwindolf.github.io/rss-finder?show-title=false
     
 
 If possible do disable CORS, if it is not possible enable the CORS proxy by adding
@@ -38,7 +38,7 @@ Your app will receive the subscribed feed URLs via the defined URI scheme.
 
 4. Use the custom HTML element in your web app.
 
-       <x-rss-finder icons="rss-finder/icons" launch-method="event" use-cors-proxy="true">
+       <x-rss-finder icons="rss-finder/icons" subscribe-method="event" use-cors-proxy="true">
 
 5. Register an subscribe event handler
 
@@ -47,7 +47,7 @@ Your app will receive the subscribed feed URLs via the defined URI scheme.
        });
 
 Note: due to "web+" custom protocol handlers not working together with CSP and CORS
-when used as a web component `launch-method` needs to be `event`.
+when used as a web component `subscribe-method` needs to be `event`.
 
 ## Configuration Parameters
 
@@ -61,7 +61,7 @@ by attribute when including as web component. The following parameters are suppo
 | scheme            | Which URI scheme to trigger for subscriptions                   | `feed:`          |
 | use-cors-proxy    | Whether to retry using a CORS proxy when a network error occurs | `false`          |
 | cors-proxy        | URL of a cors proxy to use                                      | `https://corsproxy.io/?url=` |
-| launch-method     | How to subscribe (via `fetch` using the define schema, via setting `location` to the feed URI or via `event`) | `fetch`          |
+| subscribe-method  | How to subscribe (via `location` using the define schema or via `event`) | `location` |
 
 ## Privacy considerations
 
