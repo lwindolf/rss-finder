@@ -1,6 +1,5 @@
 // vim: set ts=4 sw=4:
 import { Subscriber } from "../Subscriber.js";
-import { pfetch } from "../net.js";
 
 export class SubscriberImpl extends Subscriber {
     static name = "Website";
@@ -33,21 +32,7 @@ export class SubscriberImpl extends Subscriber {
             if (!feedUrl.startsWith('http'))
                 feedUrl = `https://${feedUrl}`;
 
-            // first try without CORS proxy
-            let response = await pfetch(feedUrl, {}, false);
-            if (response) {
-                if (response.ok) {
-                    let data = await response.text();
-                    this.autodiscover(el, data, feedUrl);
-                } else {
-                    // Accept HTTP error status (do not try CORS proxy) if not a network error
-                    el.querySelector("#results").innerHTML = `<p class="error">Failed to fetch <a href="${feedUrl}">${feedUrl}</a>: ${response.status} ${response.statusText}</p>`;
-                    return;
-                }
-            }
-
-            // 2nd try with CORS proxy
-            response = await pfetch(feedUrl, {}, true);
+            let response = await fetch(feedUrl, { corsProxyAllowed: true });
             if (response && response.ok) {
                 let data = await response.text();
                 this.autodiscover(el, data, feedUrl);

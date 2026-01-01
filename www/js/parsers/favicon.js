@@ -19,7 +19,6 @@
 // 3.) links poiting to smaller icons
 
 import { XPath } from './xpath.js';
-import { pfetch } from '../net.js';
 
 class Favicon {
     static searches = [
@@ -38,7 +37,7 @@ class Favicon {
 
         try {
             // Parse HTML
-            let doc = await pfetch(url, {}, corsProxyAllowed)
+            let doc = await fetch(url, { corsProxyAllowed })
                 .then((response) => response.text())
                 .then((str) => {
                     return new DOMParser().parseFromString(str, 'text/html');
@@ -66,7 +65,7 @@ class Favicon {
 
         // If nothing found see if there is a 'favicon.ico' on the homepage
         if(!result)
-            result = await pfetch(url + '/favicon.ico', {}, corsProxyAllowed)
+            result = await fetch(url + '/favicon.ico', { corsProxyAllowed })
                 .then((response) => response.text())
                 .then(() => url + '/favicon.ico');
 

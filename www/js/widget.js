@@ -2,6 +2,9 @@
 
 import { SubscriberOverview } from "./SubscriberOverview.js";
 
+import './helpers/net.js';
+import './helpers/log.js';
+
 // Implements <x-rss-finder> web component
 
 const stylesheet = new CSSStyleSheet()

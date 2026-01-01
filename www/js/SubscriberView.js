@@ -214,7 +214,7 @@ export class SubscriberView {
         }
 
         if(method === 'event') {
-            document.dispatchEvent(new CustomEvent('rss-finder-subscribe', {
+            this.#el.dispatchEvent(new CustomEvent('rss-finder-subscribe', {
                 detail: { url },
                 bubbles: true,
                 composed: true
