@@ -5,7 +5,7 @@
 /* allows to use the exported fetch as default fetch */
 const originalFetch = window.fetch.bind(window);
 
-// Fetch and URL normally or via CORS proxy
+// Fetch an URL normally or via CORS proxy
 //
 // Same signature as fetch, only difference is that you can pass
 // options.allowCorsProxy = true to enforce using the CORS proxy.
