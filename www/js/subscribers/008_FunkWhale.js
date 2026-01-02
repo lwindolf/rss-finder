@@ -23,8 +23,17 @@ export class SubscriberImpl extends SearchForm {
                                     <img src='{{artist.cover.urls.medium_square_crop}}' loading='lazy'/>
                                 </div>
                                 <div class='resultDetails'>
-                                    <div class='resultTitle'><a href="{{artist.fid}}">{{artist.name}}</a></div>
-                                    <div class='resultProfile'>{{artist.description.text}}</div>
+                                    <div class='resultTitle'>
+                                        <a href="{{artist.fid}}">{{artist.name}}</a>
+                                    </div>
+                                    <div class='resultProfile'>
+                                        <p>
+                                            {{#if artist.tracks_count}}
+                                                Track count: {{artist.tracks_count}}
+                                            {{/if}}
+                                        </p>
+                                        <p>{{{artist.description.html}}}</p>
+                                    </div>
                                     <div class='resultGenre'>
                                         {{#each artist.tags}}
                                             <span>{{this}}</span>
