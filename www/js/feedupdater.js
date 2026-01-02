@@ -8,9 +8,9 @@ import { Feed } from './feed.js';
 export class FeedUpdater {
     // returns a feed properties or at least error code (e.g. "{ error: Feed.ERROR_XML }")
     // result should be merged into the feed being updated
-    static async fetch(url, corsProxyAllowed = false) {
+    static async fetch(url) {
         console.info(`Updating ${url}`);
-        var feed = await fetch(url, { corsProxyAllowed })
+        var feed = await fetch(url, { allowCorsProxy: true })
             .then((response) => {
                 // FIXME: proper network state handling
                 return response.text()

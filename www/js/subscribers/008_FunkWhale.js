@@ -1,33 +1,36 @@
 // vim: set ts=4 sw=4:
 
+import { Fediverse } from "../Fediverse.js";
 import { SearchForm } from "../SearchForm.js";
 
 export class SubscriberImpl extends SearchForm {
-    static name = "iTunes";
-    static favicon = "itunes.svg";
+    static name = "FunkWhale";
+    static favicon = "funkwhale.ico";
+    static title = "Find FunkWhale channels";
+    static category = "audio";
 
     constructor(el) {
         super(
             el,
             (params) =>
-                `https://itunes.apple.com/search?term=${encodeURIComponent(params.search)}&media=podcast&entity=podcast&limit=20&version=2&output=json`,
+                `https://${params.server}/api/v1/channels/`,
             (el, data) => {
-                this.render(el, `            
+                this.render(el, `
                     {{#each results}}
                         <div class='result block'>
                             <div class='resultInfo'>
                                 <div class='resultImage'>
-                                    <img src='{{artworkUrl100}}' loading='lazy'/>
+                                    <img src='{{artist.cover.urls.medium_square_crop}}' loading='lazy'/>
                                 </div>
                                 <div class='resultDetails'>
-                                    <div class='resultTitle'><a href="{{collectionViewUrl}}">{{collectionName}}</a></div>
-                                    <div class='resultArtist'>{{artistName}}</div>
+                                    <div class='resultTitle'><a href="{{artist.fid}}">{{artist.name}}</a></div>
+                                    <div class='resultProfile'>{{artist.description.text}}</div>
                                     <div class='resultGenre'>
-                                        {{#each genres}}
+                                        {{#each artist.tags}}
                                             <span>{{this}}</span>
                                         {{/each}}
                                     </div>
-                                    <div class='resultFeedHidden'>{{feedUrl}}</div>
+                                    <div class='resultFeedHidden'>{{rss_url}}</div>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +47,20 @@ export class SubscriberImpl extends SearchForm {
                         this.preview(details.querySelector('.resultFeedHidden').textContent, details);
                     });
                 });
-            }
+            },
+            [
+                {
+                    name: "server",
+                    type: "select",
+                    options: Fediverse.getNodesBySW('funkwhale')
+                    .sort((a, b) => a.domain.localeCompare(b.domain))
+                    .map(node => ({
+                        value: node.domain,
+                        label: node.domain + (node.name ? ' --- ' + node.name : '')
+                    })),
+                    label: "<p>Select a FunkWhale instance to show all artist accounts</p>"
+                }
+            ]
         );
     }
 }

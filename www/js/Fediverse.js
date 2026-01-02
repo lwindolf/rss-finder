@@ -22,8 +22,12 @@ export class Fediverse {
                 [...]
         */       
 
-        const response = await fetch('data/fediverse.json');
-        this.#data = (await response.json()).data;
+        try {
+            const response = await fetch('data/fediverse.json');
+            this.#data = (await response.json()).data;
+        } catch (error) {
+            console.error("Error fetching Fediverse data: ", error);
+        }
     }
 
     static getNodesBySW(name) {

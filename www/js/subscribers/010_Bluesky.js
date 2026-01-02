@@ -9,8 +9,8 @@ export class SubscriberImpl extends SearchForm {
     constructor(el) {
         super(
             el,
-            (query) =>
-                `https://public.api.bsky.app/xrpc/app.bsky.actor.searchActors?q=${encodeURIComponent(query)}`,
+            (params) =>
+                `https://public.api.bsky.app/xrpc/app.bsky.actor.searchActors?q=${encodeURIComponent(params.search)}`,
             (el, data) => {
                 this.render(el, `            
                     {{#each results}}

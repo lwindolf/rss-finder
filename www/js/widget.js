@@ -225,6 +225,9 @@ class RssFinder extends HTMLElement {
 
         constructor() {
                 super();
+                window.app = {
+                        debug: false
+                }
                 window.RssFinder = this;
         }
 

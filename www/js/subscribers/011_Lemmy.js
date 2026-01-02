@@ -10,8 +10,8 @@ export class SubscriberImpl extends SearchForm {
     constructor(el) {
         super(
             el,
-            (query) =>
-                `https://lemmy.ml/api/v3/search?type_=Communities&q=${encodeURIComponent(query)}`,
+            (params) =>
+                `https://lemmy.ml/api/v3/search?type_=Communities&q=${encodeURIComponent(params.search)}`,
             (el, data) => {
                 this.render(el, `
                     {{#each results}}

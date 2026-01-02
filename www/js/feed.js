@@ -80,11 +80,6 @@ export class Feed {
                 i.nodeId = this.id;
                 i.save();
             })
-            
-            // feed provided favicon should always win
-            if (f.icon)
-                this.icon = this.corsProxyAllowed?`https://corsproxy.io/?${f.icon}`:f.icon;
-
         }
 
         this.last_updated = f.last_updated;

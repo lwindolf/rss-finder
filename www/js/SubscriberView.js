@@ -58,12 +58,7 @@ export class SubscriberView {
             url
         });
 
-        // first try without CORS proxy
-        this.#feed = await FeedUpdater.fetch(url, false);
-
-        // then with CORS proxy
-        if(this.#feed.error > 0)
-            this.#feed = await FeedUpdater.fetch(url, true);
+        this.#feed = await FeedUpdater.fetch(url, true);
 
         if (this.#feed.newItems) {
             this.#feed.newItems = this.#feed.newItems.slice(0, 100); // limit preview to 100 items
