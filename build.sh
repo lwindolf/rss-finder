@@ -5,6 +5,8 @@ set -euo pipefail
 # Install deps
 test -d www/js/vendor || mkdir www/js/vendor
 cp node_modules/handlebars/dist/handlebars.min.js www/js/vendor
+test -d www/js/parsers || mkdir www/js/parsers
+cp -r lzone-feed-parser/src/* www/js/parsers
 
 # Install feed index data
 # Update it if necessary

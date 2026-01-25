@@ -1,6 +1,6 @@
 # RSS Finder
 
-A simple web component finding RSS feeds for different sources.
+A simple web component finding RSS feeds for different sources that can be embedded in feed readers.
 
 Intended embedded use cases:
 
@@ -29,6 +29,7 @@ Your app will receive the subscribed feed URLs via the defined URI scheme.
 
 ## Embed as a web component
 
+1. `git submodule init` and `git submodule update`
 1. `npm run build`
 2. Copy the `www` directory to your code base as `rss-finder`
 3. Include the sources 

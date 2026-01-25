@@ -1,4 +1,5 @@
 node_modules/
 www/data/*
 www/js/vendor/*
+www/js/parsers/*
 www/js/SubscriberList.js

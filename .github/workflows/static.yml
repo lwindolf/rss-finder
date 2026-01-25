@@ -37,6 +37,8 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Build static content
         run: |
+          git submodule init
+          git submodule update
           npm i
           npm test
           npm run build
