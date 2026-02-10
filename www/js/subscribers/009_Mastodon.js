@@ -10,8 +10,8 @@ export class SubscriberImpl extends SearchForm {
     constructor(el) {
         super(
             el,
-            (query) =>
-                `https://mastodon.social/api/v2/search?type=accounts&q=${encodeURIComponent(query)}`,
+            (params) =>
+                `https://mastodon.social/api/v2/search?type=accounts&q=${encodeURIComponent(params.search)}`,
             (el, data) => {
                 this.render(el, `
                     {{#each results}}
