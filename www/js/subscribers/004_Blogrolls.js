@@ -119,8 +119,10 @@ export class SubscriberImpl extends Subscriber {
     async #loadOPML(url, el) {
         const div = document.createElement("div");
         div.className = "preview";
-        el.querySelectorAll(".preview").forEach(e => e.remove());
-        el.appendChild(div).innerText = `Fetching ${url}...`;
+        div.innerText = `Fetching ${url}...`;
+        this.#results.querySelectorAll(".preview").forEach(e => e.remove());
+        el.appendChild(div);
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
         try {
             // Load the OPML file and display it in a preview

@@ -51,6 +51,7 @@ h1 img.favicon {
 .subscriberList a {
         text-decoration: none;
         color: #666;
+        cursor: pointer;
 }
 
 .subscriber img {
