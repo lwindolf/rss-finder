@@ -31,7 +31,9 @@ window.fetch = async function(url, options = {}) {
                 return;
 
             // We expect only CORS proxy URLs where we just need to add the encoded URL
-            result = await originalFetch(window.RssFinder.settings["cors-proxy"]+encodeURI(url), options);
+            console.error('Using CORS proxy for:', url);
+            console.error(window.RssFinder.settings["cors-proxy"]+encodeURIComponent(url));
+            result = await originalFetch(window.RssFinder.settings["cors-proxy"]+encodeURIComponent(url), options);
         }
         return result;
     } catch (error) {

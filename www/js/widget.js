@@ -76,6 +76,7 @@ h1 img.favicon {
 
 .result button {
         padding: 0.5rem;
+        margin: 0.5rem 0;
 }
 .result button img {
         width: 1rem;
@@ -136,39 +137,41 @@ h1 img.favicon {
 
 .previewContainer {
         display: flex;
-        flex-grow: 1;
         gap: 0;
         width: 100%;
-        height:50vh;
+        height: 60vh;
         background: white;
         clear: both;
-        margin-bottom: 0.5rem;
-        margin-top: 0.5rem;
         color: #222;
 }
 .itemlist {
-        flex: 1;
-        margin:0;
+        flex: 0 0 50%;
+        box-sizing: border-box;
+        margin: 0;
         border: 1px solid #777;
         cursor: pointer;
         overflow: hidden;
         overflow-y: scroll;
 }
 
-.itemlist .item {
+.itemlist .item,
+.blogroll .feed {
         border-bottom: 1px solid #aaa;
         padding: 0.8rem 0.5rem;
 }
-.itemlist .item:last-child {
+.itemlist .item:last-child,
+.blogroll .feed:last-child {
         border: none;
 }
-.itemlist .item:hover {
+.itemlist .item:hover,
+.blogroll .feed:hover {
         background: #ddd;
 }
 .itemlist .item .title {
         font-weight: bold;
 }
-.itemlist .item.selected {
+.itemlist .item.selected,
+.blogroll .feed.selected {
         background: #ddd;
 }
 .itemlist .item .date,
@@ -179,7 +182,8 @@ h1 img.favicon {
 
 .itemview {
         cursor: default;
-        flex: 1;
+        flex: 0 0 50%;
+        box-sizing: border-box;
         margin:0;
         padding: 1rem;
         vertical-align: top;
@@ -209,6 +213,41 @@ h1 img.favicon {
 .highlight {
         background: yellow;
 }
+
+.blogroll {
+        clear: both;
+        height: 65vh;
+        margin-top: 0.5rem;
+}
+
+.blogroll .blogs {
+        width: 33%;
+        height: 60vh;
+        float: left;
+        box-sizing: border-box;
+        margin: 0;
+        border: 1px solid #777;
+        background: white;
+        color: black;
+        cursor: pointer;
+        overflow: hidden;
+        overflow-y: scroll;
+}
+
+.blogroll .blogrollPreview {
+        width: 66%;
+        float: left;
+}
+
+.blogroll .folder {
+        padding: 0.8rem 0.5rem;
+        font-weight: bold;
+        border-bottom: 1px solid #ccc;
+}
+.blogroll .folderChildren {
+        padding-left: 1.5rem;
+}
+
 `);
 
 class RssFinder extends HTMLElement {

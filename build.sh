@@ -8,16 +8,19 @@ cp node_modules/handlebars/dist/handlebars.min.js www/js/vendor
 test -d www/js/parsers || mkdir www/js/parsers
 cp -r lzone-feed-parser/src/* www/js/parsers
 
-# Install feed index data
-# Update it if necessary
 test -d www/data || mkdir -p www/data
-if [ -f www/data/url-title.json ] && [ $(find www/data/url-title.json -mtime +7 | wc -l) -gt 0 ]; then
-    echo "Dropping out-dated url-title.json"
-    rm www/data/url-title.json
-fi
-if [ ! -f www/data/url-title.json ]; then
-    curl -L https://lwindolf.github.io/rss-feed-index/data/url-title.json -o www/data/url-title.json
-fi
+
+# Install feed + blogroll index data
+# Update it if necessary
+for f in url-title.json blogroll.json; do
+     if [ -f www/data/$f ] && [ $(find www/data/$f -mtime +7 | wc -l) -gt 0 ]; then
+        echo "Dropping out-dated $f"
+        rm www/data/$f
+    fi
+    if [ ! -f www/data/$f ]; then
+        curl -L https://lwindolf.github.io/rss-feed-index/data/$f -o www/data/$f
+    fi
+done
 
 # Install fediverse server index
 # Update it if necessary
