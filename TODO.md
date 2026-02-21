@@ -43,6 +43,8 @@ Indexes:
 - https://openrss.org/
 - https://rssgizmos.com/kebber.html
 - https://fetchrss.com/source/facebook
+- https://ooh.directory/
+- https://blogroll.org/
 
 Index Integrations:
 - Rythmbox
