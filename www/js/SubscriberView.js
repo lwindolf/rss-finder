@@ -24,7 +24,7 @@ export class SubscriberView {
                     <button>Back to Overview</button>
                 </nav>
 
-                <h1><img class="favicon" src="{{settings.icon-path}}/{{favicon}}"></img> {{title}}</h1>
+                <h1><img class="favicon" src="{{settings.base-path}}/icons/{{favicon}}"></img> {{title}}</h1>
 
                 <div id='subscriberView'>
                 </div>
@@ -99,10 +99,11 @@ export class SubscriberView {
 
                     </div>
                 </div>
-                <button id="subscribeButton"><img src="icons/default.svg"/> Subscribe</button> <button id="copyUrlButton">📋 Copy Feed URL</button>
+                <button id="subscribeButton"><img src="{{settings.base-path}}/icons/default.svg"/> Subscribe</button> <button id="copyUrlButton">📋 Copy Feed URL</button>
             {{/compare}}
         `), {
-            feed: this.#feed
+            feed: this.#feed,
+            settings: window.RssFinder.settings
         });
         this.#renderItem(el, 0);
 

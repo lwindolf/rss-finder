@@ -34,7 +34,7 @@ export class SubscriberOverview {
 				{{#each subscribers}}
 					<a name='{{name}}'>
 						<div class='subscriber block' data-name='{{name}}'>
-							<img src='{{../settings.icon-path}}/{{favicon}}'/>
+							<img src='{{../settings.base-path}}/icons/{{favicon}}'/>
 							<div class='subscriberTitle'>{{name}}</div>
 						</div>
 					</a>

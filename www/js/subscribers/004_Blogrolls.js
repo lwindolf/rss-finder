@@ -68,7 +68,7 @@ export class SubscriberImpl extends Subscriber {
     }
 
     async #loadData() {
-        const response = await fetch('data/blogroll.json');
+        const response = await fetch(window.RssFinder.settings['base-path'] + '/data/blogroll.json');
         const reader = response.body.getReader();
 
         let receivedLength = 0; // received that many bytes at the moment

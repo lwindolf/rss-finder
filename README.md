@@ -58,11 +58,11 @@ by attribute when including as web component. The following parameters are suppo
 | Parameter         | Description                                                     | Default          |
 |-------------------|-----------------------------------------------------------------|------------------|
 | show-title        | Whether to add a `<h1>` title                                   | `true`           |
-| icon-path         | Path to subscriber icons (adapt it when using as webcomponent)  | `icons`          |
 | scheme            | Which URI scheme to trigger for subscriptions                   | `feed:`          |
 | use-cors-proxy    | Whether to retry using a CORS proxy when a network error occurs | `false`          |
 | cors-proxy        | URL of a cors proxy to use                                      | `https://corsproxy.io/?url=` |
 | subscribe-method  | How to subscribe (via `location` using the define schema or via `event`) | `location` |
+| base-path         | Base URL for fetching data + icons                              | `https://lwindolf.github.io/rss-finder` |
 
 ## Privacy considerations
 
@@ -75,7 +75,8 @@ disable CORS internally.
 If you want to use RSS finder in a pure web app the browser CORS settings will disallow
 access to almost all feeds and you will need to enable the cors-proxy. In this case ensure
 your users know about the privacy impact (e.g. Cloudflare hosting corsproxy.io potentially 
-knowing about the feeds they subscribe to).
+knowing about the feeds they subscribe to). Note that the Cloudflare proxy can only be used
+with the github.io hosting and can be gone at any time.
 
 ### Accessing 3rd party APIs
 
