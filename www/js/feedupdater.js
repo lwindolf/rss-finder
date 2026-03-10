@@ -10,7 +10,7 @@ export class FeedUpdater {
     // result should be merged into the feed being updated
     static async fetch(url) {
         console.info(`Updating ${url}`);
-        var feed = await fetch(url, { allowCorsProxy: true })
+        var feed = await fetch(url, { allowCorsProxy: window.RssFinder.settings['use-cors-proxy'] })
             .then((response) => {
                 // FIXME: proper network state handling
                 return response.text()
