@@ -51,6 +51,9 @@ export class SubscriberImpl extends Subscriber {
             {{/each}}
         {{/inline}}
 
+        <div>
+            <button id="subscribeOPMLButton"><img src="${window.RssFinder.settings['base-path']}/icons/opml-icon-64x64.png"/>Subscribe / Download OPML</button>
+        </div>
         <div class="blogroll">
             <div class="blogs">
                 {{> outlineBlock}}
@@ -164,7 +167,7 @@ export class SubscriberImpl extends Subscriber {
                         return result;
                     };
                     const body = xmlDoc.querySelector('body') || xmlDoc.documentElement;
-                    this.#renderOPML(div, parseOutlines(body));
+                    this.#renderOPML(div, parseOutlines(body), url);
                 })
         } catch(e) {
             div.innerText = 'Error when loading OPML! ' + e.message;
@@ -172,7 +175,7 @@ export class SubscriberImpl extends Subscriber {
         }
     }
 
-    async #renderOPML(el, outlines) {
+    async #renderOPML(el, outlines, url) {
         r.renderElement(el, SubscriberImpl.#templateOPML, outlines);
 
         const blogroll = el.querySelector(".blogroll");
@@ -183,6 +186,10 @@ export class SubscriberImpl extends Subscriber {
                 this.preview(feed.dataset.url, blogroll.querySelector(".blogrollPreview"))
                 ev.stopPropagation();
             });
+        });
+        el.querySelector("#subscribeOPMLButton").addEventListener("click", (ev) => {
+            ev.stopPropagation();
+            window.open(url, '_self');
         });
     }
 
