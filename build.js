@@ -3,11 +3,14 @@ import path from 'path';
 
 // Mock some deps
 global.window = {};
+window.RssFinder = {};
+window.RssFinder.settings = {};
 window.Handlebars = {
     registerHelper: () => {},
     compile: () => {}
 }
 
+const statusFile = path.join('www', 'data', 'status.json');
 const outputFile = path.join('www', 'js', 'SubscriberList.js');
 const subscriberPath = path.join('www', 'js', 'subscribers');
 const subscriberFiles = fs.readdirSync(subscriberPath).filter(file => file.endsWith('.js')).sort();
@@ -32,5 +35,26 @@ export class SubscriberList {
     static getByName = (name) => SubscriberList.#subscribers.find(s => s.name === name);
     static getAll = () => SubscriberList.#subscribers;
 }`);
+
+console.log(`Writing ${statusFile} ...`);
+const now = Math.ceil(new Date() / 1000);
+// FIXME: hard-coded interval (pipeline runs at least weekly)
+const refreshInterval = 7 * 24 * 60 * 60;
+fs.writeFileSync(statusFile, JSON.stringify({ 
+    meta: {
+        name: "RSS Finder Build",
+        links: {
+            "Website": "https://lwindolf.github.io/rss-finder/",
+            "GitHub": "https://github.com/lwindolf/rss-finder"
+        },
+        favicon: "https://lwindolf.github.io/rss-finder/icons/default.svg"
+    },
+    schedule: {
+        lastUpdate : now,
+        refresh    : refreshInterval,
+        nextRun    : refreshInterval + now,
+        maxAge     : refreshInterval * 2
+    }
+}, null, 2));
 
 console.log('Done.');
