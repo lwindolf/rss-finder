@@ -12,7 +12,7 @@ export class SubscriberImpl extends Subscriber {
     static title = "Search Blogrolls";
 
     static #index;
-    static #template = r.template(`
+    static #template = `
         {{#each results}}
             <div class="result block">
                 <div class='resultInfo'>
@@ -31,7 +31,7 @@ export class SubscriberImpl extends Subscriber {
                     {{/with}}
                 </div>
             </div>
-        {{/each}}`);
+        {{/each}}`;
 
     static #templateOPML = r.template(`
         {{#*inline "outlineBlock"}}
@@ -113,10 +113,10 @@ export class SubscriberImpl extends Subscriber {
         const offset = Math.floor(Math.random() * (list.length - 100));
         list = list.slice(offset, offset + 100);
 
-        this.#results.innerHTML = '<h2>100 Random Blogrolls</h2>';
-        r.renderElement(this.#results, SubscriberImpl.#template, {
-            results: this.#mapDomainList(list)
-        });
+        this.#results.innerHTML = '<h2>100 Random Blogrolls</h2>' +
+            r.renderToString(SubscriberImpl.#template, {
+                results: this.#mapDomainList(list)
+            });
     }
 
     async #loadOPML(url, el) {
@@ -196,7 +196,7 @@ export class SubscriberImpl extends Subscriber {
     async #render(el) {
         el.innerHTML = `
                 <form id="search-form" class="block">
-                        <p>Search all blogrolls</p>
+                        <p class="prompt"></p>
                         <input type="text" id="search" placeholder="Search for a domain / blogroll URL / title ..." disabled />
                 </form>
                 <div id="results">Loading ...</div>
@@ -220,6 +220,7 @@ export class SubscriberImpl extends Subscriber {
         searchInput.disabled = false;
         searchInput.focus();
         searchInput.addEventListener('input', this.#performSearch.bind(this));
+        el.querySelector('#search-form .prompt').innerText = `Search through ${Object.keys(SubscriberImpl.#index).length} indexed blogrolls.`;
         this.#loadRandom();
 
         this.#results.addEventListener('click', (ev) => {
@@ -240,10 +241,10 @@ export class SubscriberImpl extends Subscriber {
             SubscriberImpl.#index[url].t?.toLowerCase().includes(query)
         );
 
-        this.#results.innerHTML = `<h2>Search Results (${list.length})</h2>`;
-        r.renderElement(this.#results, SubscriberImpl.#template, {
-            results: this.#mapDomainList(list.slice(0, 100))
-        });
+        this.#results.innerHTML = `<h2>Search Results (${list.length})</h2>` +
+            r.renderToString(SubscriberImpl.#template, {
+                results: this.#mapDomainList(list.slice(0, 100))
+            });
 
         if (query.length > 2) {
             // Highlight search term in results
