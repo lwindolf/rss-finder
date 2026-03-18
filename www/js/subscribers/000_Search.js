@@ -11,7 +11,7 @@ export class SubscriberImpl extends Subscriber {
 
         static #index;
         static #flatIndex;
-        static #template = r.template(`
+        static #template = `
                 {{#each results}}
                         {{#each feeds}}
                         <div class="result block">
@@ -22,13 +22,15 @@ export class SubscriberImpl extends Subscriber {
                                                 {{#if t}}<span title="This feed has rich text content.">Long text</span>{{/if}}
                                                 {{#compare m '&' 1}}<span title="Podcast">&#127911;</span>{{/compare}}
                                                 {{#compare m '&' 2}}<span title="Video">&#127916;</span>{{/compare}}
+                                                {{#compare M '&' 1}}<span title="author is part of the Fediverse">Fediverse</span>{{/compare}}
+                                                {{#compare M '&' 2}}<span title="Blog is an Indieweb blog">Indieweb</span>{{/compare}}
                                         </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         {{/each}}
-                {{/each}}`);
+                {{/each}}`;
 
         #results;       // DOM node for results display
 
@@ -91,10 +93,10 @@ export class SubscriberImpl extends Subscriber {
                 const offset = Math.floor(Math.random() * (list.length - 100));
                 list = list.slice(offset, offset + 100);
 
-                this.#results.innerHTML = '<h2>100 Random Feeds</h2>';
-                r.renderElement(this.#results, SubscriberImpl.#template, {
-                        results: this.#mapDomainList(list)
-                });
+                this.#results.innerHTML = '<h2>100 Random Feeds</h2>' +
+                        r.renderToString(SubscriberImpl.#template, {
+                                results: this.#mapDomainList(list)
+                        });
         }
 
         async #render(el) {
@@ -102,6 +104,14 @@ export class SubscriberImpl extends Subscriber {
                 <form id="search-form" class="block">
                         <p>Search over 150,000 RSS feeds</p>
                         <input type="text" id="search" placeholder="Search for a domain / feed name..." disabled />
+                        <div>
+                                <input type="checkbox" id="longtext" /> <label for="longtext" title="Search only feeds with long text content">Long Text</label>
+                                <input type="checkbox" id="audio" /> <label for="audio" title="Search only feeds with embedded audio">Podcast</label>
+                                <input type="checkbox" id="video" /> <label for="video" title="Search only feeds with embedded videos">Video</label>
+                                <input type="checkbox" id="indieweb" /> <label for="indieweb" title="Search only Indieweb feeds">Indieweb</label>
+                                <input type="checkbox" id="fediverse" /> <label for="fediverse" title="Search only Fediverse authors">Fediverse</label>
+                                <!--<input type="checkbox" id="blogroll" /> <label for="blogroll" title="Search only feeds with a blogroll">Blogroll</label>-->
+                        </div>
                 </form>
                 <div id="results">Loading ...</div>
                 `;
@@ -123,7 +133,7 @@ export class SubscriberImpl extends Subscriber {
 
                 searchInput.disabled = false;
                 searchInput.focus();
-                searchInput.addEventListener('input', this.#performSearch.bind(this));
+                el.addEventListener('input', this.#performSearch.bind(this));
                 this.#loadRandom();
 
                 this.#results.addEventListener('click', (ev) => {
@@ -136,7 +146,15 @@ export class SubscriberImpl extends Subscriber {
         }
 
         #performSearch(event) {
-                const query = event.target.value.toLowerCase();
+                const form = event.target.closest('form');
+                const query = form.querySelector('#search').value.toLowerCase();
+                const longtext = form.querySelector('#longtext').checked;
+                const audio = form.querySelector('#audio').checked;
+                const video = form.querySelector('#video').checked;
+                const indieweb = form.querySelector('#indieweb').checked;
+                const fediverse = form.querySelector('#fediverse').checked;
+                const blogroll = false; // form.querySelector('#blogroll').checked;
+
                 console.log(`Searching for ${query}`);
 
                 if(!SubscriberImpl.#flatIndex) {
@@ -149,15 +167,21 @@ export class SubscriberImpl extends Subscriber {
                         }).flat();
                 }
                 const list = SubscriberImpl.#flatIndex.filter(e =>
-                        e.v.u.toLowerCase().includes(query) ||
-                        e.v.n.toLowerCase().includes(query) ||
-                        e.domain.toLowerCase().includes(query)
+                        (e.v.u.toLowerCase().includes(query) ||
+                         e.v.n.toLowerCase().includes(query) ||
+                         e.domain.toLowerCase().includes(query))
+                        && (!longtext || e.v.t)
+                        && (!audio || e.v.m & 1)
+                        && (!video || e.v.m & 2)
+                        && (!indieweb || e.v.M & 2)
+                        && (!fediverse || e.v.M & 1)
+                        && (!blogroll || e.v.M & 64)
                 ).map(e => e.domain);
 
-                this.#results.innerHTML = `<h2>Search Results (${list.length})</h2>`;
-                r.renderElement(this.#results, SubscriberImpl.#template, {
-                        results: this.#mapDomainList(list.slice(0, 100))
-                });
+                this.#results.innerHTML = `<h2>Search Results (${list.length})</h2>` +
+                        r.renderToString(SubscriberImpl.#template, {
+                                results: this.#mapDomainList(list.slice(0, 100))
+                        });
 
                 if(query.length > 2) {
                         // Highlight search term in results

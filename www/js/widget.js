@@ -5,7 +5,7 @@ import { SubscriberOverview } from "./SubscriberOverview.js";
 import './helpers/net.js';
 import './helpers/log.js';
 
-// Implements <x-rss-finder> web component
+// <x-rss-finder> web component
 
 const stylesheet = new CSSStyleSheet()
 
@@ -37,11 +37,11 @@ h1 img.favicon {
         background: #ddd;
 }
 
-#subscriberView form input {
+#subscriberView form input[type=text] {
         box-sizing: border-box;
         width: 100%;
         margin-bottom: 12px;
-        padding: 6px;
+        padding: 8px 6px;
 }
 
 #subscriberView form button {
