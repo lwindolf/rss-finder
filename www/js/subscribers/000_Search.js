@@ -10,7 +10,6 @@ export class SubscriberImpl extends Subscriber {
         static title = "Search RSS Feed Index";
 
         static #index;
-        static #flatIndex;
         static #template = `
                 {{#each results}}
                         {{#each feeds}}
@@ -22,8 +21,10 @@ export class SubscriberImpl extends Subscriber {
                                                 {{#if t}}<span title="This feed has rich text content.">Long text</span>{{/if}}
                                                 {{#compare m '&' 1}}<span title="Podcast">&#127911;</span>{{/compare}}
                                                 {{#compare m '&' 2}}<span title="Video">&#127916;</span>{{/compare}}
-                                                {{#compare M '&' 1}}<span title="author is part of the Fediverse">Fediverse</span>{{/compare}}
-                                                {{#compare M '&' 2}}<span title="Blog is an Indieweb blog">Indieweb</span>{{/compare}}
+                                                {{#compare ../minor '&' 1}}<span title="author is part of the Fediverse">Fediverse</span>{{/compare}}
+                                                {{#compare ../minor '&' 2}}<span title="Blog is an Indieweb blog">Indieweb</span>{{/compare}}
+                                                {{#compare ../minor '&' 16}}<span title="Blog is an Wordpress blog">Wordpress</span>{{/compare}}
+                                                {{../major}}
                                         </span>
                                     </div>
                                 </div>
@@ -40,7 +41,8 @@ export class SubscriberImpl extends Subscriber {
         }
 
         async #loadData() {
-                const response = await fetch(window.RssFinder.settings['base-path'] + '/data/url-title.json');
+                const meta = await fetch(window.RssFinder.settings['base-path'] + '/data/meta.json').then(res => res.json());
+                const response = await fetch(window.RssFinder.settings['base-path'] + '/data/url-feeds.json');
                 const reader = response.body.getReader();
 
                 let receivedLength = 0; // received that many bytes at the moment
@@ -69,15 +71,20 @@ export class SubscriberImpl extends Subscriber {
                 return JSON.parse(new TextDecoder("utf-8").decode(chunksAll));
         }
 
-        // Map a list of domains to [{domain, feeds}] list for result rendering
-        // Also expands protocol of domain if missing and expands relative feed URLs
+        // Map a list of urls to [{url, feeds}] list for result rendering
+        // Also expands protocol of url if missing and expands relative feed URLs
         #mapDomainList(list) {
-                return list.sort().map(domain => {
-                        const withProto = domain.includes('://') ? domain : 'https://' + domain;
+                return list.sort().map(url => {
+                        if(!SubscriberImpl.#index[url])
+                                return;
+
+                        const withProto = url.includes('://') ? url : 'https://' + url;
                         return {
-                                domainName: domain,
+                                domainName: url,
                                 domain: withProto,
-                                feeds: Object.values(SubscriberImpl.#index[domain]).map(feed => {
+                                minor: SubscriberImpl.#index[url]?.M,
+                                blogroll: SubscriberImpl.#index[url]?.b,
+                                feeds: Object.values(SubscriberImpl.#index[url].f).map(feed => {
                                         if (feed.u[0] === '/')
                                                 feed.u = withProto + feed.u;
                                             if (!feed.u.includes('://'))
@@ -110,6 +117,7 @@ export class SubscriberImpl extends Subscriber {
                                 <input type="checkbox" id="video" /> <label for="video" title="Search only feeds with embedded videos">Video</label>
                                 <input type="checkbox" id="indieweb" /> <label for="indieweb" title="Search only Indieweb feeds">Indieweb</label>
                                 <input type="checkbox" id="fediverse" /> <label for="fediverse" title="Search only Fediverse authors">Fediverse</label>
+                                <input type="checkbox" id="wordpress" /> <label for="wordpress" title="Search only Wordpress blogs">Wordpress</label>
                                 <!--<input type="checkbox" id="blogroll" /> <label for="blogroll" title="Search only feeds with a blogroll">Blogroll</label>-->
                         </div>
                 </form>
@@ -153,30 +161,29 @@ export class SubscriberImpl extends Subscriber {
                 const video = form.querySelector('#video').checked;
                 const indieweb = form.querySelector('#indieweb').checked;
                 const fediverse = form.querySelector('#fediverse').checked;
+                const wordpress = form.querySelector('#wordpress').checked;
                 const blogroll = false; // form.querySelector('#blogroll').checked;
 
                 console.log(`Searching for ${query}`);
 
-                if(!SubscriberImpl.#flatIndex) {
-                        // flatten the data structure to a list of {domain, url, name}
-                        SubscriberImpl.#flatIndex = Object.keys(SubscriberImpl.#index).map(domain => {
-                                // eslint-disable-next-line no-unused-vars
-                                return Object.entries(SubscriberImpl.#index[domain]).map(([i, v]) => {
-                                        return { domain, v };
-                                });
-                        }).flat();
-                }
-                const list = SubscriberImpl.#flatIndex.filter(e =>
-                        (e.v.u.toLowerCase().includes(query) ||
-                         e.v.n.toLowerCase().includes(query) ||
-                         e.domain.toLowerCase().includes(query))
-                        && (!longtext || e.v.t)
-                        && (!audio || e.v.m & 1)
-                        && (!video || e.v.m & 2)
-                        && (!indieweb || e.v.M & 2)
-                        && (!fediverse || e.v.M & 1)
-                        && (!blogroll || e.v.M & 64)
-                ).map(e => e.domain);
+                const list = Object.keys(SubscriberImpl.#index).filter(url => {
+                        const value = SubscriberImpl.#index[url];
+                        // FIXME: get bits from meta.json
+                        if ((indieweb  && !(value.M & 2)) ||
+                            (fediverse && !(value.M & 1)) ||
+                            (wordpress && !(value.M & 16)) ||
+                            (blogroll  && !(value.M & 64)))
+                            return false;
+
+                        return value.f.some(feed => {
+                                return (url.toLowerCase().includes(query) ||
+                                        feed.u.toLowerCase().includes(query) ||
+                                        feed.n && feed.n.toLowerCase().includes(query))
+                                        && (!longtext || feed.t)
+                                        && (!audio || feed.m & 1)
+                                        && (!video || feed.m & 2);
+                        });
+                });
 
                 this.#results.innerHTML = `<h2>Search Results (${list.length})</h2>` +
                         r.renderToString(SubscriberImpl.#template, {

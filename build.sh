@@ -12,7 +12,7 @@ test -d www/data || mkdir -p www/data
 
 # Install feed + blogroll index data
 # Update it if necessary
-for f in url-title.json blogroll.json; do
+for f in url-feeds.json meta.json blogroll.json; do
      if [ -f www/data/$f ] && [ $(find www/data/$f -mtime +7 | wc -l) -gt 0 ]; then
         echo "Dropping out-dated $f"
         rm www/data/$f
