@@ -9,6 +9,7 @@ export class SubscriberImpl extends Subscriber {
         static favicon = "default.svg";
         static title = "Search RSS Feed Index";
 
+        static #meta;
         static #index;
         static #template = `
                 {{#each results}}
@@ -40,8 +41,11 @@ export class SubscriberImpl extends Subscriber {
                 this.#render(el);
         }
 
-        async #loadData() {
-                const meta = await fetch(window.RssFinder.settings['base-path'] + '/data/meta.json').then(res => res.json());
+        async #loadData(el) {
+                if(SubscriberImpl.#index)
+                        return;
+
+                SubscriberImpl.#meta = await fetch(window.RssFinder.settings['base-path'] + '/data/meta.json').then(res => res.json());
                 const response = await fetch(window.RssFinder.settings['base-path'] + '/data/url-feeds.json');
                 const reader = response.body.getReader();
 
@@ -55,7 +59,7 @@ export class SubscriberImpl extends Subscriber {
 
                         chunks.push(value);
                         receivedLength += value.length;
-                        this.#results.innerHTML = `Loading ... ${ (receivedLength / 1024 / 1024).toFixed(2) } MB`;
+                        el.innerHTML = `Loading ... ${ (receivedLength / 1024 / 1024).toFixed(2) } MB`;
                 }
 
                 // concatenate chunks into single Uint8Array
@@ -68,7 +72,7 @@ export class SubscriberImpl extends Subscriber {
                 }
                 
                 // decode into a string
-                return JSON.parse(new TextDecoder("utf-8").decode(chunksAll));
+                SubscriberImpl.#index = JSON.parse(new TextDecoder("utf-8").decode(chunksAll));
         }
 
         // Map a list of urls to [{url, feeds}] list for result rendering
@@ -95,21 +99,35 @@ export class SubscriberImpl extends Subscriber {
                 });
         }
 
-        #loadRandom() {
+        #loadRandom(el) {
                 let list = Object.keys(SubscriberImpl.#index);
                 const offset = Math.floor(Math.random() * (list.length - 100));
                 list = list.slice(offset, offset + 100);
 
-                this.#results.innerHTML = '<h2>100 Random Feeds</h2>' +
+                el.innerHTML = '<h2>100 Random Feeds</h2>' +
                         r.renderToString(SubscriberImpl.#template, {
                                 results: this.#mapDomainList(list)
                         });
         }
 
         async #render(el) {
+                el.innerHTML = `<div id="results">Loading ...</div>`;
+
+                try {
+                        await this.#loadData(el.querySelector('#results'));
+                } catch (error) {
+                        el.innerHTML = `<div class="subscriber-error">Failed to load search index: ${error.message}</div>`;
+                        return;
+                }
+
+                if(!SubscriberImpl.#index || SubscriberImpl.#index.length === 0) {
+                        el.innerHTML = `<div class="subscriber-error">Failed to load search index</div>`;
+                        return;
+                }
+
                 el.innerHTML = `
                 <form id="search-form" class="block">
-                        <p>Search over 150,000 RSS feeds</p>
+                        <p>Search ${SubscriberImpl.#meta.feeds} RSS feeds</p>
                         <input type="text" id="search" placeholder="Search for a domain / feed name..." disabled />
                         <div>
                                 <input type="checkbox" id="longtext" /> <label for="longtext" title="Search only feeds with long text content">Long Text</label>
@@ -121,29 +139,16 @@ export class SubscriberImpl extends Subscriber {
                                 <!--<input type="checkbox" id="blogroll" /> <label for="blogroll" title="Search only feeds with a blogroll">Blogroll</label>-->
                         </div>
                 </form>
-                <div id="results">Loading ...</div>
+                <div id="results"></div>
                 `;
 
-                this.#results = el.querySelector('#results');
                 const searchInput = el.querySelector('#search');
-
-                try {
-                        SubscriberImpl.#index = await this.#loadData();
-                } catch (error) {
-                        el.innerHTML = `<div class="subscriber-error">Failed to load search index: ${error.message}</div>`;
-                        return;
-                }
-
-                if(!SubscriberImpl.#index || SubscriberImpl.#index.length === 0) {
-                        el.innerHTML = `<div class="subscriber-error">Failed to load search index</div>`;
-                        return;
-                }
-
                 searchInput.disabled = false;
                 searchInput.focus();
                 el.addEventListener('input', this.#performSearch.bind(this));
-                this.#loadRandom();
 
+                this.#results = el.querySelector('#results');
+                this.#loadRandom(this.#results);
                 this.#results.addEventListener('click', (ev) => {
                         const result = ev.target.closest('.result');
                         if (result) {
@@ -192,8 +197,8 @@ export class SubscriberImpl extends Subscriber {
 
                 if(query.length > 2) {
                         // Highlight search term in results
-                        const results = this.#results.querySelectorAll('.result .highlightText');
-                        results.forEach(link => {
+                        const r = this.#results.querySelectorAll('.result .highlightText');
+                        r.forEach(link => {
                                 const regex = new RegExp(`(${query})`, 'gi');
                                 const newContent = link.textContent.replace(regex, '<span class="highlight">$1</span>');
                                 link.innerHTML = newContent;
@@ -204,6 +209,5 @@ export class SubscriberImpl extends Subscriber {
                         this.#results.innerHTML += '<p>No results found. Try a different search term.</p>';
                 if(list.length == 100)
                         this.#results.innerHTML += '<p>Showing first 100 results only. Please refine your search.</p>';
-
         }
 }
