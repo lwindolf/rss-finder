@@ -17,7 +17,10 @@ export class SubscriberImpl extends Subscriber {
                         <div class="result block">
                             <div class='resultInfo'>
                                 <div class='resultDetails' data-url='{{u}}'>
-                                    <div class='resultTitle'><a class="domain" href="{{../domain}}"><span class="highlightText">{{../domainName}}</span></a> -- <span class="highlightText">{{#if n}}{{n}}{{else}}{{u}}{{/if}}</span>
+                                    <div class='resultTitle'>
+                                        <a class="domain" href="{{../domain}}">
+                                                <span class="highlightText">{{../domainName}}</span>
+                                        </a> -- <span class="highlightText">{{#if n}}{{n}}{{else}}{{u}}{{/if}}</span>
                                         <span class='resultGenre' style='float: right;'>
                                                 {{#if t}}<span title="This feed has rich text content.">Long text</span>{{/if}}
                                                 {{#compare m '&' 1}}<span title="Podcast">&#127911;</span>{{/compare}}

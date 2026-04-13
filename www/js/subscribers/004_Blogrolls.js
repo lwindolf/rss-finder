@@ -18,12 +18,23 @@ export class SubscriberImpl extends Subscriber {
                 <div class='resultInfo'>
                     {{#with blogroll}}
                     <div class='resultDetails' data-url='{{opml}}'>
-                            <div class='resultTitle highlightText'>
+                            <div class='resultTitle'>
+                                {{#compare n ">" 0}}
+                                <span class='resultGenre' style='float: right;'>
+                                    <span>
+                                        {{#compare n ">" 1}}
+                                            {{n}} Feeds
+                                        {{else}}
+                                            1 Feed
+                                        {{/compare}}
+                                    </span>
+                                </span>
+                                {{/compare}}
                                 <a href="{{opml}}">
                                     {{#if t}}
-                                            {{t}}
+                                            <span class="highlightText">{{t}}</span>
                                     {{else}}
-                                            {{u}}
+                                            <span class="highlightText">{{u}}</span>
                                     {{/if}}
                                 </a>
                             </div>
@@ -220,7 +231,7 @@ export class SubscriberImpl extends Subscriber {
         searchInput.disabled = false;
         searchInput.focus();
         searchInput.addEventListener('input', this.#performSearch.bind(this));
-        el.querySelector('#search-form .prompt').innerText = `Search through ${Object.keys(SubscriberImpl.#index).length} indexed blogrolls.`;
+        el.querySelector('#search-form .prompt').innerText = `Search ${Object.keys(SubscriberImpl.#index).length} indexed blogrolls.`;
         this.#loadRandom();
 
         this.#results.addEventListener('click', (ev) => {
