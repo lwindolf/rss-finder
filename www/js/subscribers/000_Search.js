@@ -127,7 +127,7 @@ export class SubscriberImpl extends Subscriber {
 
                 el.innerHTML = `
                 <form id="search-form" class="block">
-                        <p>Search ${SubscriberImpl.#meta.feeds} RSS feeds</p>
+                        <p>Search over ${Math.floor(SubscriberImpl.#meta.feeds / 10000) * 10000} RSS feeds</p>
                         <input type="text" id="search" placeholder="Search for a domain / feed name..." disabled />
                         <div>
                                 <input type="checkbox" id="longtext" /> <label for="longtext" title="Search only feeds with long text content">Long Text</label>
