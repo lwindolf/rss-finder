@@ -34,7 +34,7 @@ export class SubscriberImpl extends Subscriber {
                                     {{#if t}}
                                             <span class="highlightText">{{t}}</span>
                                     {{else}}
-                                            <span class="highlightText">{{u}}</span>
+                                            <span class="highlightText">{{opml}}</span>
                                     {{/if}}
                                 </a>
                             </div>
@@ -147,6 +147,7 @@ export class SubscriberImpl extends Subscriber {
                     return response.text()
                 })
                 .then(data => {
+                    console.log("loadOPML",url)
                     const parser = new DOMParser();
                     const xmlDoc = parser.parseFromString(data, 'text/xml');
 
@@ -158,7 +159,7 @@ export class SubscriberImpl extends Subscriber {
                         const result = { children: [] };
                         const outlines = parent.querySelectorAll(':scope > outline');
                         outlines.forEach(outline => {
-                            const text = outline.getAttribute('text');
+                            const text = outline.getAttribute('text') || outline.getAttribute('title') || outline.getAttribute('description');
                             if(!text)
                                 return;
                             const textStr = new DOMParser().parseFromString(text, 'text/html').documentElement.textContent
