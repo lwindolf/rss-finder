@@ -2,12 +2,13 @@
 
 export function parseOPMLOutlines(parent) {
     const result = { children: [] };
+    const textParser = new DOMParser();
     const outlines = parent.querySelectorAll(':scope > outline');
     outlines.forEach(outline => {
         const text = outline.getAttribute('text') || outline.getAttribute('title') || outline.getAttribute('description');
         const xmlUrl = outline.getAttribute('xmlUrl');
         const htmlUrl = outline.getAttribute('htmlUrl') || outline.getAttribute('url');
-        const label = text ? new DOMParser().parseFromString(text, 'text/html').documentElement.textContent : (xmlUrl || htmlUrl);
+        const label = text ? textParser.parseFromString(text, 'text/html').documentElement.textContent : (xmlUrl || htmlUrl);
         if (!label)
             return;
         if (xmlUrl) {
