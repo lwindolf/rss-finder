@@ -12,32 +12,44 @@ export class SubscriberImpl extends Subscriber {
     static title = "Search Blogrolls";
 
     static #index;
+
+    static #formTemplate = `
+        <p class="prompt"></p>
+        <input type="text" id="search" placeholder="Search for a domain / blogroll URL / title ..." />
+        {{#eachSorted minorBitMask}}
+            <input type="checkbox" id="filter-{{@index}}" data-value="{{@key}}" class="filter-checkbox" /> <label for="filter-{{@index}}">{{.}}</label>
+        {{/eachSorted}}
+    `;
+
     static #template = `
         {{#each results}}
             <div class="result block">
                 <div class='resultInfo'>
                     {{#with blogroll}}
                     <div class='resultDetails' data-url='{{opml}}'>
-                            <div class='resultTitle'>
-                                {{#compare n ">" 0}}
-                                <span class='resultGenre' style='float: right;'>
-                                    <span>
-                                        {{#compare n ">" 1}}
-                                            {{n}} Feeds
-                                        {{else}}
-                                            1 Feed
-                                        {{/compare}}
-                                    </span>
-                                </span>
-                                {{/compare}}
-                                <a href="{{opml}}">
-                                    {{#if t}}
-                                            <span class="highlightText">{{t}}</span>
+                        {{#compare M "==" 1}}
+                            <div>Catalog <a href="{{D}}">{{D}}</a></div>
+                        {{/compare}}
+                        <div class='resultTitle'>
+                            {{#compare n ">" 0}}
+                            <span class='resultGenre' style='float: right;'>
+                                <span>
+                                    {{#compare n ">" 1}}
+                                        {{n}} Feeds
                                     {{else}}
-                                            <span class="highlightText">{{opml}}</span>
-                                    {{/if}}
-                                </a>
-                            </div>
+                                        1 Feed
+                                    {{/compare}}
+                                </span>
+                            </span>
+                            {{/compare}}
+                            <a href="{{opml}}">
+                                {{#if t}}
+                                        <span class="highlightText">{{t}}</span>
+                                {{else}}
+                                        <span class="highlightText">{{opml}}</span>
+                                {{/if}}
+                            </a>
+                        </div>
                     </div>
                     {{/with}}
                 </div>
@@ -207,18 +219,18 @@ export class SubscriberImpl extends Subscriber {
 
     async #render(el) {
         el.innerHTML = `
-                <form id="search-form" class="block">
-                        <p class="prompt"></p>
-                        <input type="text" id="search" placeholder="Search for a domain / blogroll URL / title ..." disabled />
-                </form>
-                <div id="results">Loading ...</div>
-                `;
-
+            <form class="block"></form>
+            <div id="results">Loading ...</div>
+        `;
         this.#results = el.querySelector('#results');
-        const searchInput = el.querySelector('#search');
+        
 
         try {
-            SubscriberImpl.#index = (await this.#loadData()).blogrolls;
+            const data = await this.#loadData();
+            SubscriberImpl.#index = data.blogrolls;
+            el.querySelector('form').innerHTML = r.renderToString(SubscriberImpl.#formTemplate, {
+                minorBitMask: data.minorBitMask
+            });
         } catch (error) {
             el.innerHTML = `<div class="subscriber-error">Failed to load search index: ${error.message}</div>`;
             return;
@@ -228,11 +240,13 @@ export class SubscriberImpl extends Subscriber {
             el.innerHTML = `<div class="subscriber-error">Failed to load search index</div>`;
             return;
         }
-
-        searchInput.disabled = false;
+    
+        const searchInput = el.querySelector('#search');
         searchInput.focus();
-        searchInput.addEventListener('input', this.#performSearch.bind(this));
-        el.querySelector('#search-form .prompt').innerText = `Search ${Object.keys(SubscriberImpl.#index).length} indexed blogrolls.`;
+        el.querySelectorAll('form input').forEach(input => {
+            input.addEventListener('input', this.#performSearch.bind(this));
+        });
+        el.querySelector('form .prompt').innerText = `Search ${Object.keys(SubscriberImpl.#index).length} indexed blogrolls.`;
         this.#loadRandom();
 
         this.#results.addEventListener('click', (ev) => {
@@ -244,14 +258,31 @@ export class SubscriberImpl extends Subscriber {
         });
     }
 
-    #performSearch(event) {
-        const query = event.target.value.toLowerCase();
-        console.log(`Searching for ${query}`);
+    #getSearchBitmask(form) {
+        const checkboxes = form.querySelectorAll('input[type="checkbox"]:checked');
+        return Array.from(checkboxes).reduce((mask, cb) => mask | parseInt(cb.dataset.value), 0);
+    }
 
-        const list = Object.keys(SubscriberImpl.#index).filter(url =>
-            SubscriberImpl.#index[url].u?.toLowerCase().includes(query) ||
-            SubscriberImpl.#index[url].t?.toLowerCase().includes(query)
-        );
+    #performSearch(event) {
+        const query = event.target.parentElement.querySelector('#search').value.toLowerCase();
+        const bitmask = this.#getSearchBitmask(event.target.parentElement);
+
+        console.log(`Searching for ${query} with bitmask ${bitmask}`);
+
+        const list = Object.keys(SubscriberImpl.#index).filter(url => {
+            const blogroll = SubscriberImpl.#index[url];
+            
+            // Check if blogroll has all required bits
+            const hasBits = bitmask === 0 || (blogroll.M & bitmask) === bitmask;
+            
+            // Check if query matches (empty query matches all)
+            const matchesQuery = !query || (
+                blogroll.u?.toLowerCase().includes(query) ||
+                blogroll.t?.toLowerCase().includes(query)
+            );
+            
+            return hasBits && matchesQuery;
+        });
 
         this.#results.innerHTML = `<h2>Search Results (${list.length})</h2>` +
             r.renderToString(SubscriberImpl.#template, {
@@ -259,10 +290,11 @@ export class SubscriberImpl extends Subscriber {
             });
 
         if (query.length > 2) {
-            // Highlight search term in results
+            // Highlight search term in results (escape regex special chars)
+            const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const results = this.#results.querySelectorAll('.result .highlightText');
             results.forEach(link => {
-                const regex = new RegExp(`(${query})`, 'gi');
+                const regex = new RegExp(`(${escapedQuery})`, 'gi');
                 const newContent = link.textContent.replace(regex, '<span class="highlight">$1</span>');
                 link.innerHTML = newContent;
             });
@@ -270,7 +302,7 @@ export class SubscriberImpl extends Subscriber {
 
         if (list.length === 0)
             this.#results.innerHTML += '<p>No results found. Try a different search term.</p>';
-        if (list.length == 100)
+        if (list.length === 100)
             this.#results.innerHTML += '<p>Showing first 100 results only. Please refine your search.</p>';
 
     }
