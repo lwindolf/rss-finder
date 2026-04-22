@@ -277,6 +277,7 @@ export class SubscriberImpl extends Subscriber {
             
             // Check if query matches (empty query matches all)
             const matchesQuery = !query || (
+                url.toLowerCase().includes(query) ||
                 blogroll.u?.toLowerCase().includes(query) ||
                 blogroll.t?.toLowerCase().includes(query)
             );
