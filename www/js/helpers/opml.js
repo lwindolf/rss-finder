@@ -1,8 +1,9 @@
 // vim: set ts=4 sw=4:
 
+const textParser = new DOMParser();
+
 export function parseOPMLOutlines(parent) {
     const result = { children: [] };
-    const textParser = new DOMParser();
     const outlines = parent.querySelectorAll(':scope > outline');
     outlines.forEach(outline => {
         const text = outline.getAttribute('text') || outline.getAttribute('title') || outline.getAttribute('description');
