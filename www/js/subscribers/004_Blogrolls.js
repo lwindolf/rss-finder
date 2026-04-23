@@ -53,7 +53,7 @@ export class SubscriberImpl extends Subscriber {
                         <div class="feed" data-url="{{url}}">{{text}}</div>
                     {{else}}
                         {{#if htmlUrl}}
-                            <a class="htmlLink" href="{{htmlUrl}}" target="_blank" rel="noopener noreferrer">{{text}}</a>
+                            <div class="feed" data-url="{{htmlUrl}}">{{text}}</div>
                         {{else}}
                         {{#if children}}
                         <div class="folder">📂 {{text}}</div>
