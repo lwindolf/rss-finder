@@ -3,7 +3,7 @@
     "test": "eslint --ignore-pattern www/js/vendor/* www/js",
     "build": "./build.sh",
     "build.js": "node build.js",
-    "start": "npx serve -S"
+    "start": "cd www && npx serve -S"
   },
   "type": "module",
   "jest": {
@@ -14,7 +14,8 @@
     "testEnvironment": "jest-environment-jsdom"
   },
   "dependencies": {
-    "handlebars": "^4.7.9"
+    "handlebars": "^4.7.9",
+    "dompurify": "^3.2.3"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.20",

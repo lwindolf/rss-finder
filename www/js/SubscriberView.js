@@ -64,12 +64,14 @@ export class SubscriberView {
             this.#feed.newItems = this.#feed.newItems.slice(0, 100); // limit preview to 100 items
             this.#feed.newItems.forEach(item => {
                 item.date = new Date(item.time*1000).toLocaleString();
+                item.description = window.DOMPurify.sanitize(item.description);
 
                 // Fix missing title (provide result in item.title2)
                 if (!item.title || item.title.trim().length === 0)
                     if (item.description && item.description.length > 0) {
                         const parser = new DOMParser();
                         const doc = parser.parseFromString(item.description, 'text/html');
+                        
                         const textContent = doc.body.textContent || '';
                         item.title2 = textContent.substring(0, 100) + (textContent.length > 100 ? '...' : '');
                         console.log("Fixed item title", item.title);

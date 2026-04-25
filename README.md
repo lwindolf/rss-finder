@@ -35,6 +35,7 @@ Your app will receive the subscribed feed URLs via the defined URI scheme.
 3. Include the sources 
 
        <script src="rss-finder/js/vendor/handlebars.min.js"></script>
+       <script src="rss-finder/js/vendor/purify.min.js"></script>
        <script type="module" src="rss-finder/js/widget.js"></script>
 
 4. Use the custom HTML element in your web app.
