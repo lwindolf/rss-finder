@@ -7,8 +7,8 @@ Intended embedded use cases:
 | Use Case                              | Embed Type    | Used by  |
 |---------------------------------------|---------------|----------|
 | Progressive web app RSS reader        | web component | lzone.de |
-| Native RSS app with browser widget    | website       | Liferea  |
-| Native RSS app without browser widget | launch in default browser | |
+| Native RSS app with browser widget    | website       |  |
+| Native RSS app without browser widget | launch in default browser | Liferea |
  
 ## Embed as website
 
