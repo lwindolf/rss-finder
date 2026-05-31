@@ -19,7 +19,7 @@ for f in url-feeds.json meta.json blogroll.json; do
         rm www/data/$f
     fi
     if [ ! -f www/data/$f ]; then
-        curl -L https://lwindolf.github.io/rss-feed-index/data/$f -o www/data/$f
+        curl -L https://lzone.de/rss-feed-index/data/$f -o www/data/$f
     fi
 done
 
