@@ -1,6 +1,7 @@
 // vim: set ts=4 sw=4:
 import { Subscriber } from "../Subscriber.js";
 import * as r from "../helpers/render.js";
+import { parseOPMLOutlines } from "../helpers/opml.js";
 
 // Search the blogroll index from https://github.com/lwindolf/rss-feed-index
 // allow loading blogrolls to show feeds and selecting them to load them
@@ -63,11 +64,15 @@ export class SubscriberImpl extends Subscriber {
                     {{#if url}}
                         <div class="feed" data-url="{{url}}">{{text}}</div>
                     {{else}}
+                        {{#if htmlUrl}}
+                            <div class="feed" data-url="{{htmlUrl}}">{{text}}</div>
+                        {{else}}
                         {{#if children}}
                         <div class="folder">📂 {{text}}</div>
                         <div class="folderChildren">
                             {{> outlineBlock}}
                         </div>
+                        {{/if}}
                         {{/if}}
                     {{/if}}
                 </div>
@@ -167,31 +172,8 @@ export class SubscriberImpl extends Subscriber {
                     if (errorNode)
                         throw new Error('Error parsing OPML: ' + errorNode.textContent);
 
-                    const parseOutlines = (parent) => {
-                        const result = { children: [] };
-                        const outlines = parent.querySelectorAll(':scope > outline');
-                        outlines.forEach(outline => {
-                            const text = outline.getAttribute('text') || outline.getAttribute('title') || outline.getAttribute('description');
-                            if(!text)
-                                return;
-                            const textStr = new DOMParser().parseFromString(text, 'text/html').documentElement.textContent
-                            const xmlUrl = outline.getAttribute('xmlUrl');
-                            if (xmlUrl) {
-                                result.children.push({
-                                    text: textStr,
-                                    url: xmlUrl
-                                });
-                            } else {
-                                result.children.push({
-                                    text: textStr,
-                                    children: parseOutlines(outline).children
-                                });
-                            }
-                        });
-                        return result;
-                    };
                     const body = xmlDoc.querySelector('body') || xmlDoc.documentElement;
-                    this.#renderOPML(div, parseOutlines(body), url);
+                    this.#renderOPML(div, parseOPMLOutlines(body), url);
                 })
         } catch(e) {
             div.innerText = 'Error when loading OPML! ' + e.message;

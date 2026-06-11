@@ -40,6 +40,18 @@ export class SubscriberOverview {
 					</a>
 				{{/each}}
 			</div>
+
+			<h2>Catalogs</h2>
+
+			<p>You do not know what you are searching for and want to explore new good content? Try those catalogs:</p>
+
+			<ul>
+				<li><a href='https://susam.net/wander/'>Wander Consoles</a>: wander through the internet based on personal suggestions</li>
+				<li><a href='https://ooh.directory/'>OOH Directory</a>: catalog of 2400 blogs</li>
+				<li><a href='https://atlasflux.saynete.net/'>Atlasflux</a>: Atlas des flux - Annuaire RSS</li>
+				<li><a href='https://indieblog.page/'>Indieblog</a>: Discover random indie blogs</li>
+				<li><a href='https://kagi.com/smallweb/'>Kagi Smallweb</a>: Random smallweb blog posts</li>
+			</ul>
 		`), {
 			subscribers: SubscriberList.getAll(),
 			settings: window.RssFinder.settings
