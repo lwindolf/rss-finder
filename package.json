@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "handlebars": "^4.7.9",
-    "dompurify": "^3.2.3"
+    "dompurify": "^3.4.11"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.22.20",
