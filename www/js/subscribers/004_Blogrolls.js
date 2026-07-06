@@ -1,7 +1,6 @@
 // vim: set ts=4 sw=4:
 import { Subscriber } from "../Subscriber.js";
 import * as r from "../helpers/render.js";
-import { parseOPMLOutlines } from "../helpers/opml.js";
 
 // Search the blogroll index from https://github.com/lwindolf/rss-feed-index
 // allow loading blogrolls to show feeds and selecting them to load them
@@ -148,6 +147,11 @@ export class SubscriberImpl extends Subscriber {
     }
 
     async #loadOPML(url, el) {
+        // dynamic import as DOM using OPML parser would otherwise break build.js
+        if(!window.OPMLParser) {
+            window.OPMLParser = await import("../helpers/opml.js");
+        }
+
         const div = document.createElement("div");
         div.className = "preview";
         div.innerText = `Fetching ${url}...`;
@@ -173,7 +177,7 @@ export class SubscriberImpl extends Subscriber {
                         throw new Error('Error parsing OPML: ' + errorNode.textContent);
 
                     const body = xmlDoc.querySelector('body') || xmlDoc.documentElement;
-                    this.#renderOPML(div, parseOPMLOutlines(body), url);
+                    this.#renderOPML(div, window.OPMLParser.parseOPMLOutlines(body), url);
                 })
         } catch(e) {
             div.innerText = 'Error when loading OPML! ' + e.message;
