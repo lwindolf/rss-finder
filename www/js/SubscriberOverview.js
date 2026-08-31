@@ -52,6 +52,7 @@ export class SubscriberOverview {
 				<li><a href='https://indieblog.page/'>Indieblog</a>: Discover random indie blogs</li>
 				<li><a href='https://kagi.com/smallweb/'>Kagi Smallweb</a>: Random smallweb blog posts</li>
 				<li><a href='https://bubbles.town/'>Bubbles</a>: Discover popular indieweb blog posts</li>
+				<li><a href='https://comiccaster.xyz'>ComicCaster</a>: Feed generator and catalog for many English comics</li>
 			</ul>
 		`), {
 			subscribers: SubscriberList.getAll(),
