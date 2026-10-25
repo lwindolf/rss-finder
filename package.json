@@ -14,7 +14,7 @@
     "testEnvironment": "jest-environment-jsdom"
   },
   "dependencies": {
-    "dompurify": "^3.4.16",
+    "dompurify": "^3.4.17",
     "handlebars": "^4.7.10"
   },
   "devDependencies": {
