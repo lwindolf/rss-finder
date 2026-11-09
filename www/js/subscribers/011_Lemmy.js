@@ -2,6 +2,8 @@
 
 import { SearchForm } from "../SearchForm.js";
 
+const DEFAULT_SERVER = "lemmy.ml";
+
 export class SubscriberImpl extends SearchForm {
     static name = "Lemmy";
     static favicon = "lemmy.svg";
@@ -11,7 +13,7 @@ export class SubscriberImpl extends SearchForm {
         super(
             el,
             (params) =>
-                `https://lemmy.ml/api/v3/search?type_=Communities&q=${encodeURIComponent(params.search)}`,
+                `https://${params.server}/api/v3/search?type_=Communities&q=${encodeURIComponent(params.search)}`,
             (el, data) => {
                 this.render(el, `
                     {{#each results}}
@@ -48,7 +50,17 @@ export class SubscriberImpl extends SearchForm {
                         this.preview(details.querySelector('.resultFeedHidden').textContent, details);
                     });
                 });
-            }
+            },
+            [
+                { name: "search", type: "text", placeholder: "Enter a search term", required: true },
+                {
+                    name: "server",
+                    type: "hidden",
+                    value: DEFAULT_SERVER,
+                    intro: "Searching on",
+                    prompt: "Enter the Lemmy server to search on:"
+                }
+            ]
         );
     }
 }

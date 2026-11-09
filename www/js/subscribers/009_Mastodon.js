@@ -2,6 +2,8 @@
 
 import { SearchForm } from "../SearchForm.js";
 
+const DEFAULT_SERVER = "mastodon.social";
+
 export class SubscriberImpl extends SearchForm {
     static name = "Mastodon";
     static favicon = "mastodon.png";
@@ -11,7 +13,7 @@ export class SubscriberImpl extends SearchForm {
         super(
             el,
             (params) =>
-                `https://mastodon.social/api/v2/search?type=accounts&q=${encodeURIComponent(params.search)}`,
+                `https://${params.server}/api/v2/search?type=accounts&q=${encodeURIComponent(params.search)}`,
             (el, data) => {
                 this.render(el, `
                     {{#each results}}
@@ -41,7 +43,17 @@ export class SubscriberImpl extends SearchForm {
                         this.preview(details.querySelector('.resultFeedHidden').textContent, details);
                     });
                 });
-            }
+            },
+            [
+                { name: "search", type: "text", placeholder: "Enter a search term", required: true },
+                {
+                    name: "server",
+                    type: "hidden",
+                    value: DEFAULT_SERVER,
+                    intro: "Searching on",
+                    prompt: "Enter the Mastodon server to search on:"
+                }
+            ]
         );
 
         el.getRootNode().getElementById('results').innerHTML += `

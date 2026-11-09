@@ -23,21 +23,29 @@ for f in url-feeds.json meta.json blogroll.json; do
     fi
 done
 
-# Install fediverse server index
-# Update it if necessary
-if [ -f www/data/fediverse.json ] && [ $(find www/data/fediverse.json -mtime +7 | wc -l) -gt 0 ]; then
-    echo "Dropping out-dated fediverse.json"
-    rm www/data/fediverse.json
-fi
-if [ ! -f www/data/fediverse.json ]; then
-    curl 'https://api.fediverse.observer/' \
-        --compressed \
-        -X POST \
-        -H 'Accept: application/json, multipart/mixed' \
-        -H 'Accept-Encoding: gzip, deflate, br, zstd' \
-        --data-raw '{"query":"query MyQuery {\n  nodes {\n    name\n    softwarename\n    status\n    domain\n  }\n}","operationName":"MyQuery"}' \
-        -o www/data/fediverse.json
-fi
+# Drop outdated fediverse serve lists
+find www/data/ -name "fediverse-*.json" -mtime +7 -delete
+
+for s in funkwhale; do
+    [ -f "www/data/fediverse-${s}.json" ] && continue
+
+    echo "Updating www/data/fediverse-${s}.json ..."
+
+    # Use https://fedidb.com/resources/api-docs#endpoint-v1-servers
+    # Follow the cursor ("links.next") until exhausted and join all pages
+    tmp=$(mktemp -d)
+    url="https://api.fedidb.org/v1/servers?software=${s}&limit=40"
+    page=0
+    while [ -n "$url" ] && [ "$url" != "null" ]; do
+        echo "  Fetching $url ..."
+        curl -sfL "$url" -o "$tmp/page-$page.json"
+        url=$(jq -r '.links.next // empty' "$tmp/page-$page.json")
+        page=$((page + 1))
+        sleep 1    # be polite to the API
+    done
+    jq -s '{data: map(.data) | add}' "$tmp"/page-*.json > "www/data/fediverse-${s}.json"
+    rm -rf "$tmp"
+done
 
 # Build subscriber index
 npm run build.js
